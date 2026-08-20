@@ -21,10 +21,9 @@ Prerequisites: JDK 25, update Intellij to the most recent version.
    |  _|   | |
    | |___  | |
    |_____| |_|
-   Greetings, earthling! I'm ET, your friendly task companion.
-   What shall we explore together today?
-   ____________________________________________________________
-   Farewell, earthling! Until our next mission!
+   Hello, friend! I'm ET, a gentle visitor from far away.
+   I may be a little lost, but I would be happy to help with your tasks.
+   What can I do for you?
    ____________________________________________________________
    ```
 
