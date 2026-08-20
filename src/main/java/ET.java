@@ -19,8 +19,7 @@ public class ET {
         System.out.println("____________________________________________________________");
 
         Scanner scanner = new Scanner(System.in);
-        String[] tasks = new String[100];
-        boolean[] taskDone = new boolean[100];
+        Task[] tasks = new Task[100];
         int taskCount = 0;
 
         while (scanner.hasNextLine()) {
@@ -36,8 +35,7 @@ public class ET {
             if (command.equals("list")) {
                 System.out.println("     Here are the tasks in your list:");
                 for (int i = 0; i < taskCount; i++) {
-                    String status = taskDone[i] ? "X" : " ";
-                    System.out.println("     " + (i + 1) + ".[" + status + "] " + tasks[i]);
+                    System.out.println("     " + (i + 1) + "." + tasks[i]);
                 }
             } else if (command.equals("mark") || command.startsWith("mark ")) {
                 String taskNumber = command.substring("mark".length()).trim();
@@ -46,9 +44,9 @@ public class ET {
                     if (taskIndex < 0 || taskIndex >= taskCount) {
                         System.out.println("     That task number does not exist.");
                     } else {
-                        taskDone[taskIndex] = true;
+                        tasks[taskIndex].markAsDone();
                         System.out.println("     Nice! I've marked this task as done:");
-                        System.out.println("       [X] " + tasks[taskIndex]);
+                        System.out.println("       " + tasks[taskIndex]);
                     }
                 } catch (NumberFormatException e) {
                     System.out.println("     Please specify a valid task number.");
@@ -60,15 +58,15 @@ public class ET {
                     if (taskIndex < 0 || taskIndex >= taskCount) {
                         System.out.println("     That task number does not exist.");
                     } else {
-                        taskDone[taskIndex] = false;
+                        tasks[taskIndex].markAsNotDone();
                         System.out.println("     OK, I've marked this task as not done yet:");
-                        System.out.println("       [ ] " + tasks[taskIndex]);
+                        System.out.println("       " + tasks[taskIndex]);
                     }
                 } catch (NumberFormatException e) {
                     System.out.println("     Please specify a valid task number.");
                 }
             } else {
-                tasks[taskCount] = command;
+                tasks[taskCount] = new Task(command);
                 taskCount++;
                 System.out.println("     added: " + command);
             }
