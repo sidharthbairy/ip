@@ -16,5 +16,8 @@ bin/
 # Temp files
 _temp/
 
+# Codex project-local skill
+/.codex/skills/present-changes-visually/
+
 /text-ui-test/ACTUAL.TXT
 text-ui-test/EXPECTED-UNIX.TXT
