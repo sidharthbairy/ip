@@ -1,11 +1,12 @@
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 
 /**
  * Entry point for the ET task companion.
  */
 public class ET {
+    /** The maximum number of tasks ET keeps in memory. */
+    private static final int MAX_TASKS = 100;
+
     /** Prevents instantiation of this entry-point class. */
     private ET() {
     }
@@ -30,7 +31,8 @@ public class ET {
         System.out.println("____________________________________________________________");
 
         Scanner scanner = new Scanner(System.in);
-        List<Task> tasks = new ArrayList<>();
+        Task[] tasks = new Task[MAX_TASKS];
+        int taskCount = 0;
 
         while (scanner.hasNextLine()) {
             String command = scanner.nextLine().trim();
@@ -44,19 +46,19 @@ public class ET {
 
             if (command.equals("list")) {
                 System.out.println("     Here are the tasks in your list:");
-                for (int i = 0; i < tasks.size(); i++) {
-                    System.out.println("     " + (i + 1) + "." + tasks.get(i));
+                for (int i = 0; i < taskCount; i++) {
+                    System.out.println("     " + (i + 1) + "." + tasks[i]);
                 }
             } else if (command.equals("mark") || command.startsWith("mark ")) {
                 String taskNumber = command.substring("mark".length()).trim();
                 try {
                     int taskIndex = Integer.parseInt(taskNumber) - 1;
-                    if (taskIndex < 0 || taskIndex >= tasks.size()) {
+                    if (taskIndex < 0 || taskIndex >= taskCount) {
                         System.out.println("     That task number does not exist.");
                     } else {
-                        tasks.get(taskIndex).markAsDone();
+                        tasks[taskIndex].markAsDone();
                         System.out.println("     Nice! I've marked this task as done:");
-                        System.out.println("       " + tasks.get(taskIndex));
+                        System.out.println("       " + tasks[taskIndex]);
                     }
                 } catch (NumberFormatException e) {
                     System.out.println("     Please specify a valid task number.");
@@ -65,12 +67,12 @@ public class ET {
                 String taskNumber = command.substring("unmark".length()).trim();
                 try {
                     int taskIndex = Integer.parseInt(taskNumber) - 1;
-                    if (taskIndex < 0 || taskIndex >= tasks.size()) {
+                    if (taskIndex < 0 || taskIndex >= taskCount) {
                         System.out.println("     That task number does not exist.");
                     } else {
-                        tasks.get(taskIndex).markAsNotDone();
+                        tasks[taskIndex].markAsNotDone();
                         System.out.println("     OK, I've marked this task as not done yet:");
-                        System.out.println("       " + tasks.get(taskIndex));
+                        System.out.println("       " + tasks[taskIndex]);
                     }
                 } catch (NumberFormatException e) {
                     System.out.println("     Please specify a valid task number.");
@@ -78,10 +80,16 @@ public class ET {
             } else {
                 try {
                     Task task = parseTask(command);
-                    tasks.add(task);
-                    System.out.println("     Got it. I've added this task:");
-                    System.out.println("       " + task);
-                    System.out.println("     Now you have " + tasks.size() + " tasks in the list.");
+                    if (taskCount == MAX_TASKS) {
+                        System.out.println("     Sorry, the task list is full.");
+                    } else {
+                        tasks[taskCount] = task;
+                        taskCount++;
+                        System.out.println("     Got it. I've added this task:");
+                        System.out.println("       " + task);
+                        System.out.println(
+                                "     Now you have " + taskCount + " tasks in the list.");
+                    }
                 } catch (IllegalArgumentException e) {
                     System.out.println("     " + e.getMessage());
                 }
@@ -103,7 +111,7 @@ public class ET {
         if (command.equals("todo") || command.startsWith("todo ")) {
             String description = command.substring("todo".length()).trim();
             requireText(description, "Please provide a description for the ToDo.");
-            return Task.todo(description);
+            return new Todo(description);
         }
 
         if (command.equals("deadline") || command.startsWith("deadline ")) {
@@ -117,7 +125,7 @@ public class ET {
             String by = remainder.substring(byMarker + "/by".length()).trim();
             requireText(description, "Please provide a description for the deadline.");
             requireText(by, "Please provide a date or time after /by.");
-            return Task.deadline(description, by);
+            return new Deadline(description, by);
         }
 
         if (command.equals("event") || command.startsWith("event ")) {
@@ -137,12 +145,12 @@ public class ET {
             requireText(description, "Please provide a description for the event.");
             requireText(from, "Please provide a starting date or time after /from.");
             requireText(to, "Please provide an ending date or time after /to.");
-            return Task.event(description, from, to);
+            return new Event(description, from, to);
         }
 
         // Keep the original behaviour for unprefixed input: it is a ToDo.
         requireText(command, "Please enter a task.");
-        return Task.todo(command);
+        return new Todo(command);
     }
 
     /**
