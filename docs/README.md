@@ -1,30 +1,54 @@
 # ET User Guide
 
-// Update the title above to match the actual product name
+ET keeps tasks in memory while it is running. Dates and times are stored as
+the strings that you enter, so you can use formats such as `Sunday`,
+`11/10/2019 5pm`, or `Mon 2pm`.
 
-// Product screenshot goes here
+## Adding tasks
 
-// Product intro goes here
+### ToDos
 
-## Adding deadlines
-
-// Describe the action and its outcome.
-
-// Give examples of usage
-
-Example: `keyword (optional arguments)`
-
-// A description of the expected outcome goes here
+Use `todo` for a task without a date or time:
 
 ```
-expected output
+todo borrow book
 ```
 
-## Feature ABC
+ET displays it as:
 
-// Feature details
+```
+[T][ ] borrow book
+```
 
+### Deadlines
 
-## Feature XYZ
+Use `/by` to specify when a task must be completed:
 
-// Feature details
+```
+deadline return book /by Sunday
+```
+
+ET displays it as:
+
+```
+[D][ ] return book (by: Sunday)
+```
+
+### Events
+
+Use `/from` and `/to` to specify an event's start and end:
+
+```
+event project meeting /from Mon 2pm /to 4pm
+```
+
+ET displays it as:
+
+```
+[E][ ] project meeting (from: Mon 2pm to: 4pm)
+```
+
+## Listing and completing tasks
+
+Use `list` to display every task. Use `mark <number>` to complete a task and
+`unmark <number>` to mark it as not done again.
