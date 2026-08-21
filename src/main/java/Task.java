@@ -5,6 +5,9 @@
  * {@code List<Task>} while adding their own display details.</p>
  */
 public class Task {
+    /** The category of this task. */
+    private final TaskType taskType;
+
     /** The text that describes this task. */
     protected final String description;
 
@@ -14,13 +17,18 @@ public class Task {
     /**
      * Creates a task that is not done yet.
      *
+     * @param taskType the category of task being created
      * @param description the text describing the task
      */
-    public Task(String description) {
+    public Task(TaskType taskType, String description) {
+        if (taskType == null) {
+            throw new IllegalArgumentException("Task type cannot be null.");
+        }
         if (description == null || description.isBlank()) {
             throw new IllegalArgumentException("Task description cannot be empty.");
         }
 
+        this.taskType = taskType;
         this.description = description;
         this.isDone = false;
     }
@@ -47,10 +55,10 @@ public class Task {
     /**
      * Returns this task's shared display portion.
      *
-     * @return the status icon and task description
+     * @return the task type, status icon, and task description
      */
     @Override
     public String toString() {
-        return "[" + getStatusIcon() + "] " + description;
+        return "[" + taskType.getDisplayCode() + "][" + getStatusIcon() + "] " + description;
     }
 }

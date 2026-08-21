@@ -12,7 +12,7 @@ public class Deadline extends Task {
      * @param by the due date or time
      */
     public Deadline(String description, String by) {
-        super(description);
+        super(TaskType.DEADLINE, description);
         if (by == null || by.isBlank()) {
             throw new IllegalArgumentException("Deadline date or time cannot be empty.");
         }
@@ -26,6 +26,6 @@ public class Deadline extends Task {
      */
     @Override
     public String toString() {
-        return "[D]" + super.toString() + " (by: " + by + ")";
+        return super.toString() + " (by: " + by + ")";
     }
 }

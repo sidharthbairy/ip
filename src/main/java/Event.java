@@ -16,7 +16,7 @@ public class Event extends Task {
      * @param to the event end date or time
      */
     public Event(String description, String from, String to) {
-        super(description);
+        super(TaskType.EVENT, description);
         if (from == null || from.isBlank()) {
             throw new IllegalArgumentException("Event start date or time cannot be empty.");
         }
@@ -34,6 +34,6 @@ public class Event extends Task {
      */
     @Override
     public String toString() {
-        return "[E]" + super.toString() + " (from: " + from + " to: " + to + ")";
+        return super.toString() + " (from: " + from + " to: " + to + ")";
     }
 }

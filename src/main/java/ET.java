@@ -34,40 +34,41 @@ public class ET {
 
         while (scanner.hasNextLine()) {
             String command = scanner.nextLine().trim();
+            CommandType commandType = CommandType.fromInput(command);
             System.out.println("____________________________________________________________");
 
-            if (command.equals("bye")) {
+            if (commandType == CommandType.BYE && command.equals("bye")) {
                 System.out.println("     Bye. Hope to see you again soon!");
                 System.out.println("____________________________________________________________");
                 break;
             }
 
-            if (command.equals("list")) {
+            if (commandType == CommandType.LIST && command.equals("list")) {
                 System.out.println("     Here are the tasks in your list:");
                 for (int i = 0; i < tasks.size(); i++) {
                     System.out.println("     " + (i + 1) + "." + tasks.get(i));
                 }
-            } else if (command.equals("mark") || command.startsWith("mark ")) {
+            } else if (commandType == CommandType.MARK) {
                 try {
-                    int taskIndex = getTaskIndex(command, "mark", tasks.size());
+                    int taskIndex = getTaskIndex(command, commandType, tasks.size());
                     tasks.get(taskIndex).markAsDone();
                     System.out.println("     Nice! I've marked this task as done:");
                     System.out.println("       " + tasks.get(taskIndex));
                 } catch (ETException e) {
                     System.out.println("     " + e.getMessage());
                 }
-            } else if (command.equals("unmark") || command.startsWith("unmark ")) {
+            } else if (commandType == CommandType.UNMARK) {
                 try {
-                    int taskIndex = getTaskIndex(command, "unmark", tasks.size());
+                    int taskIndex = getTaskIndex(command, commandType, tasks.size());
                     tasks.get(taskIndex).markAsNotDone();
                     System.out.println("     OK, I've marked this task as not done yet:");
                     System.out.println("       " + tasks.get(taskIndex));
                 } catch (ETException e) {
                     System.out.println("     " + e.getMessage());
                 }
-            } else if (command.equals("delete") || command.startsWith("delete ")) {
+            } else if (commandType == CommandType.DELETE) {
                 try {
-                    int taskIndex = getTaskIndex(command, "delete", tasks.size());
+                    int taskIndex = getTaskIndex(command, commandType, tasks.size());
                     Task removedTask = tasks.remove(taskIndex);
                     System.out.println("     Noted. I've removed this task:");
                     System.out.println("       " + removedTask);
@@ -77,7 +78,7 @@ public class ET {
                 }
             } else {
                 try {
-                    Task task = parseTask(command);
+                    Task task = parseTask(command, commandType);
                     tasks.add(task);
                     System.out.println("     Got it. I've added this task:");
                     System.out.println("       " + task);
@@ -97,18 +98,19 @@ public class ET {
      * kept as strings because ET does not need to compare or calculate them.
      *
      * @param command the command entered by the user
+     * @param commandType the recognised type of the command
      * @return the task represented by the command
      * @throws ETException if the command is unknown or missing required information
      */
-    private static Task parseTask(String command) throws ETException {
-        if (command.equals("todo") || command.startsWith("todo ")) {
-            String description = command.substring("todo".length()).trim();
+    private static Task parseTask(String command, CommandType commandType) throws ETException {
+        if (commandType == CommandType.TODO) {
+            String description = command.substring(commandType.getKeyword().length()).trim();
             requireText(description, "Please provide a description for the ToDo.");
             return new Todo(description);
         }
 
-        if (command.equals("deadline") || command.startsWith("deadline ")) {
-            String remainder = command.substring("deadline".length()).trim();
+        if (commandType == CommandType.DEADLINE) {
+            String remainder = command.substring(commandType.getKeyword().length()).trim();
             int byMarker = remainder.indexOf("/by");
             if (byMarker < 0) {
                 throw new ETException("Please include /by followed by the deadline date or time.");
@@ -121,8 +123,8 @@ public class ET {
             return new Deadline(description, by);
         }
 
-        if (command.equals("event") || command.startsWith("event ")) {
-            String remainder = command.substring("event".length()).trim();
+        if (commandType == CommandType.EVENT) {
+            String remainder = command.substring(commandType.getKeyword().length()).trim();
             int fromMarker = remainder.indexOf("/from");
             int toMarker = fromMarker < 0
                     ? -1
@@ -159,13 +161,14 @@ public class ET {
      * Extracts and validates the one-based task number used by task commands.
      *
      * @param command the full command entered by the user
-     * @param action the command keyword that accepts a task number
+     * @param commandType the command that accepts a task number
      * @param taskCount the number of tasks currently stored
      * @return the zero-based index of the referenced task
      * @throws ETException if the task number is absent, invalid, or out of range
      */
-    private static int getTaskIndex(String command, String action, int taskCount) throws ETException {
-        String taskNumber = command.substring(action.length()).trim();
+    private static int getTaskIndex(String command, CommandType commandType, int taskCount)
+            throws ETException {
+        String taskNumber = command.substring(commandType.getKeyword().length()).trim();
         try {
             int taskIndex = Integer.parseInt(taskNumber) - 1;
             if (taskIndex < 0 || taskIndex >= taskCount) {
@@ -173,7 +176,7 @@ public class ET {
             }
             return taskIndex;
         } catch (NumberFormatException e) {
-            throw new ETException("Please give a valid task number after " + action + ".");
+            throw new ETException("Please give a valid task number after " + commandType.getKeyword() + ".");
         }
     }
 }
