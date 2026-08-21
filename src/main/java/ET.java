@@ -50,32 +50,22 @@ public class ET {
                     System.out.println("     " + (i + 1) + "." + tasks[i]);
                 }
             } else if (command.equals("mark") || command.startsWith("mark ")) {
-                String taskNumber = command.substring("mark".length()).trim();
                 try {
-                    int taskIndex = Integer.parseInt(taskNumber) - 1;
-                    if (taskIndex < 0 || taskIndex >= taskCount) {
-                        System.out.println("     That task number does not exist.");
-                    } else {
-                        tasks[taskIndex].markAsDone();
-                        System.out.println("     Nice! I've marked this task as done:");
-                        System.out.println("       " + tasks[taskIndex]);
-                    }
-                } catch (NumberFormatException e) {
-                    System.out.println("     Please specify a valid task number.");
+                    int taskIndex = getTaskIndex(command, "mark", taskCount);
+                    tasks[taskIndex].markAsDone();
+                    System.out.println("     Nice! I've marked this task as done:");
+                    System.out.println("       " + tasks[taskIndex]);
+                } catch (ETException e) {
+                    System.out.println("     " + e.getMessage());
                 }
             } else if (command.equals("unmark") || command.startsWith("unmark ")) {
-                String taskNumber = command.substring("unmark".length()).trim();
                 try {
-                    int taskIndex = Integer.parseInt(taskNumber) - 1;
-                    if (taskIndex < 0 || taskIndex >= taskCount) {
-                        System.out.println("     That task number does not exist.");
-                    } else {
-                        tasks[taskIndex].markAsNotDone();
-                        System.out.println("     OK, I've marked this task as not done yet:");
-                        System.out.println("       " + tasks[taskIndex]);
-                    }
-                } catch (NumberFormatException e) {
-                    System.out.println("     Please specify a valid task number.");
+                    int taskIndex = getTaskIndex(command, "unmark", taskCount);
+                    tasks[taskIndex].markAsNotDone();
+                    System.out.println("     OK, I've marked this task as not done yet:");
+                    System.out.println("       " + tasks[taskIndex]);
+                } catch (ETException e) {
+                    System.out.println("     " + e.getMessage());
                 }
             } else {
                 try {
@@ -90,7 +80,7 @@ public class ET {
                         System.out.println(
                                 "     Now you have " + taskCount + " tasks in the list.");
                     }
-                } catch (IllegalArgumentException e) {
+                } catch (ETException e) {
                     System.out.println("     " + e.getMessage());
                 }
             }
@@ -105,9 +95,9 @@ public class ET {
      *
      * @param command the command entered by the user
      * @return the task represented by the command
-     * @throws IllegalArgumentException if a typed command is missing required information
+     * @throws ETException if the command is unknown or missing required information
      */
-    private static Task parseTask(String command) {
+    private static Task parseTask(String command) throws ETException {
         if (command.equals("todo") || command.startsWith("todo ")) {
             String description = command.substring("todo".length()).trim();
             requireText(description, "Please provide a description for the ToDo.");
@@ -118,7 +108,7 @@ public class ET {
             String remainder = command.substring("deadline".length()).trim();
             int byMarker = remainder.indexOf("/by");
             if (byMarker < 0) {
-                throw new IllegalArgumentException("A deadline must include a /by date or time.");
+                throw new ETException("Please include /by followed by the deadline date or time.");
             }
 
             String description = remainder.substring(0, byMarker).trim();
@@ -135,8 +125,7 @@ public class ET {
                     ? -1
                     : remainder.indexOf("/to", fromMarker + "/from".length());
             if (fromMarker < 0 || toMarker < 0) {
-                throw new IllegalArgumentException(
-                        "An event must include /from and /to date or time values.");
+                throw new ETException("Please include both /from and /to for the event time.");
             }
 
             String description = remainder.substring(0, fromMarker).trim();
@@ -148,9 +137,7 @@ public class ET {
             return new Event(description, from, to);
         }
 
-        // Keep the original behaviour for unprefixed input: it is a ToDo.
-        requireText(command, "Please enter a task.");
-        return new Todo(command);
+        throw new ETException("I don't recognise that command. Try todo, deadline, event, list, mark, unmark, or bye.");
     }
 
     /**
@@ -159,9 +146,31 @@ public class ET {
      * @param value the command component to check
      * @param errorMessage the message to use when it is missing
      */
-    private static void requireText(String value, String errorMessage) {
+    private static void requireText(String value, String errorMessage) throws ETException {
         if (value.isBlank()) {
-            throw new IllegalArgumentException(errorMessage);
+            throw new ETException(errorMessage);
+        }
+    }
+
+    /**
+     * Extracts and validates the one-based task number used by mark commands.
+     *
+     * @param command the full command entered by the user
+     * @param action the command keyword, either {@code mark} or {@code unmark}
+     * @param taskCount the number of tasks currently stored
+     * @return the zero-based index of the referenced task
+     * @throws ETException if the task number is absent, invalid, or out of range
+     */
+    private static int getTaskIndex(String command, String action, int taskCount) throws ETException {
+        String taskNumber = command.substring(action.length()).trim();
+        try {
+            int taskIndex = Integer.parseInt(taskNumber) - 1;
+            if (taskIndex < 0 || taskIndex >= taskCount) {
+                throw new ETException("That task number is not in the current list.");
+            }
+            return taskIndex;
+        } catch (NumberFormatException e) {
+            throw new ETException("Please give a valid task number after " + action + ".");
         }
     }
 }
