@@ -106,6 +106,69 @@ ____________________________________________________________
 ____________________________________________________________
 ```
 
+### Delete a task and renumber the remaining list
+
+Aim: Verify that deleting a task removes the requested task, reports the new count, and renumbers the remaining tasks.
+
+Inputs:
+```text
+todo read book
+deadline return book /by June 6th
+event project meeting /from Aug 6th 2pm /to 4pm
+todo borrow book
+delete 3
+list
+bye
+```
+
+Expected output:
+```text
+____________________________________________________________
+ _____ _____
+| ____|_   _|
+|  _|   | |
+| |___  | |
+|_____| |_|
+Hello, friend! I'm ET, a gentle visitor from far away.
+I may be a little lost, but I would be happy to help with your tasks.
+What can I do for you?
+____________________________________________________________
+____________________________________________________________
+     Got it. I've added this task:
+       [T][ ] read book
+     Now you have 1 tasks in the list.
+____________________________________________________________
+____________________________________________________________
+     Got it. I've added this task:
+       [D][ ] return book (by: June 6th)
+     Now you have 2 tasks in the list.
+____________________________________________________________
+____________________________________________________________
+     Got it. I've added this task:
+       [E][ ] project meeting (from: Aug 6th 2pm to: 4pm)
+     Now you have 3 tasks in the list.
+____________________________________________________________
+____________________________________________________________
+     Got it. I've added this task:
+       [T][ ] borrow book
+     Now you have 4 tasks in the list.
+____________________________________________________________
+____________________________________________________________
+     Noted. I've removed this task:
+       [E][ ] project meeting (from: Aug 6th 2pm to: 4pm)
+     Now you have 3 tasks in the list.
+____________________________________________________________
+____________________________________________________________
+     Here are the tasks in your list:
+     1.[T][ ] read book
+     2.[D][ ] return book (by: June 6th)
+     3.[T][ ] borrow book
+____________________________________________________________
+____________________________________________________________
+     Bye. Hope to see you again soon!
+____________________________________________________________
+```
+
 ### Report invalid commands without ending the session
 
 Aim: Verify that invalid commands are reported with ET-specific exceptions and that ET continues accepting later valid commands.
@@ -136,7 +199,7 @@ ____________________________________________________________
      Please provide a description for the ToDo.
 ____________________________________________________________
 ____________________________________________________________
-     I don't recognise that command. Try todo, deadline, event, list, mark, unmark, or bye.
+     I don't recognise that command. Try todo, deadline, event, list, mark, unmark, delete, or bye.
 ____________________________________________________________
 ____________________________________________________________
      Got it. I've added this task:

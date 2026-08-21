@@ -1,12 +1,11 @@
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 /**
  * Entry point for the ET task companion.
  */
 public class ET {
-    /** The maximum number of tasks ET keeps in memory. */
-    private static final int MAX_TASKS = 100;
-
     /** Prevents instantiation of this entry-point class. */
     private ET() {
     }
@@ -31,8 +30,7 @@ public class ET {
         System.out.println("____________________________________________________________");
 
         Scanner scanner = new Scanner(System.in);
-        Task[] tasks = new Task[MAX_TASKS];
-        int taskCount = 0;
+        List<Task> tasks = new ArrayList<>();
 
         while (scanner.hasNextLine()) {
             String command = scanner.nextLine().trim();
@@ -46,40 +44,45 @@ public class ET {
 
             if (command.equals("list")) {
                 System.out.println("     Here are the tasks in your list:");
-                for (int i = 0; i < taskCount; i++) {
-                    System.out.println("     " + (i + 1) + "." + tasks[i]);
+                for (int i = 0; i < tasks.size(); i++) {
+                    System.out.println("     " + (i + 1) + "." + tasks.get(i));
                 }
             } else if (command.equals("mark") || command.startsWith("mark ")) {
                 try {
-                    int taskIndex = getTaskIndex(command, "mark", taskCount);
-                    tasks[taskIndex].markAsDone();
+                    int taskIndex = getTaskIndex(command, "mark", tasks.size());
+                    tasks.get(taskIndex).markAsDone();
                     System.out.println("     Nice! I've marked this task as done:");
-                    System.out.println("       " + tasks[taskIndex]);
+                    System.out.println("       " + tasks.get(taskIndex));
                 } catch (ETException e) {
                     System.out.println("     " + e.getMessage());
                 }
             } else if (command.equals("unmark") || command.startsWith("unmark ")) {
                 try {
-                    int taskIndex = getTaskIndex(command, "unmark", taskCount);
-                    tasks[taskIndex].markAsNotDone();
+                    int taskIndex = getTaskIndex(command, "unmark", tasks.size());
+                    tasks.get(taskIndex).markAsNotDone();
                     System.out.println("     OK, I've marked this task as not done yet:");
-                    System.out.println("       " + tasks[taskIndex]);
+                    System.out.println("       " + tasks.get(taskIndex));
+                } catch (ETException e) {
+                    System.out.println("     " + e.getMessage());
+                }
+            } else if (command.equals("delete") || command.startsWith("delete ")) {
+                try {
+                    int taskIndex = getTaskIndex(command, "delete", tasks.size());
+                    Task removedTask = tasks.remove(taskIndex);
+                    System.out.println("     Noted. I've removed this task:");
+                    System.out.println("       " + removedTask);
+                    System.out.println("     Now you have " + tasks.size() + " tasks in the list.");
                 } catch (ETException e) {
                     System.out.println("     " + e.getMessage());
                 }
             } else {
                 try {
                     Task task = parseTask(command);
-                    if (taskCount == MAX_TASKS) {
-                        System.out.println("     Sorry, the task list is full.");
-                    } else {
-                        tasks[taskCount] = task;
-                        taskCount++;
-                        System.out.println("     Got it. I've added this task:");
-                        System.out.println("       " + task);
-                        System.out.println(
-                                "     Now you have " + taskCount + " tasks in the list.");
-                    }
+                    tasks.add(task);
+                    System.out.println("     Got it. I've added this task:");
+                    System.out.println("       " + task);
+                    System.out.println(
+                            "     Now you have " + tasks.size() + " tasks in the list.");
                 } catch (ETException e) {
                     System.out.println("     " + e.getMessage());
                 }
@@ -137,7 +140,7 @@ public class ET {
             return new Event(description, from, to);
         }
 
-        throw new ETException("I don't recognise that command. Try todo, deadline, event, list, mark, unmark, or bye.");
+        throw new ETException("I don't recognise that command. Try todo, deadline, event, list, mark, unmark, delete, or bye.");
     }
 
     /**
@@ -153,10 +156,10 @@ public class ET {
     }
 
     /**
-     * Extracts and validates the one-based task number used by mark commands.
+     * Extracts and validates the one-based task number used by task commands.
      *
      * @param command the full command entered by the user
-     * @param action the command keyword, either {@code mark} or {@code unmark}
+     * @param action the command keyword that accepts a task number
      * @param taskCount the number of tasks currently stored
      * @return the zero-based index of the referenced task
      * @throws ETException if the task number is absent, invalid, or out of range

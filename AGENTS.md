@@ -41,3 +41,4 @@ After every code update:
 Use lightweight tags unless the user requests an annotated tag.
 When proposing or creating a commit message, include enough detail to explain the rationale for the change.
 Do not commit or push unless explicitly asked.
+When the user asks for “CTP”, commit the current in-scope changes, create a lightweight tag named after the current Codex task title (for example, `Level-6`), and push both the commit and tag without requesting further confirmation.

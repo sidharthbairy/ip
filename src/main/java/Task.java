@@ -2,7 +2,7 @@
  * Represents the common state and behaviour of every task.
  *
  * <p>Specific task types inherit this class so that they can be stored in one
- * {@code Task[]} while adding their own display details.</p>
+ * {@code List<Task>} while adding their own display details.</p>
  */
 public class Task {
     /** The text that describes this task. */
