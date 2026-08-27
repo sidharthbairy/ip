@@ -20,6 +20,15 @@ public class Deadline extends Task {
     }
 
     /**
+     * Returns this deadline's due date or time.
+     *
+     * @return the date or time entered after {@code /by}
+     */
+    public String getBy() {
+        return by;
+    }
+
+    /**
      * Returns this deadline in the format used by the task list.
      *
      * @return the deadline type, status icon, description, and due date or time

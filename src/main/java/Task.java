@@ -42,6 +42,33 @@ public class Task {
         return isDone ? "X" : " ";
     }
 
+    /**
+     * Returns whether this task has been completed.
+     *
+     * @return {@code true} if this task is done, or {@code false} otherwise
+     */
+    public boolean isDone() {
+        return isDone;
+    }
+
+    /**
+     * Returns the category of this task.
+     *
+     * @return this task's type
+     */
+    public TaskType getTaskType() {
+        return taskType;
+    }
+
+    /**
+     * Returns the description entered for this task.
+     *
+     * @return this task's description
+     */
+    public String getDescription() {
+        return description;
+    }
+
     /** Marks this task as done. */
     public void markAsDone() {
         isDone = true;
