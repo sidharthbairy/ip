@@ -1,3 +1,4 @@
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -29,8 +30,9 @@ public class ET {
         System.out.println("What can I do for you?");
         System.out.println("____________________________________________________________");
 
+        Storage storage = new Storage();
+        List<Task> tasks = loadTasks(storage);
         Scanner scanner = new Scanner(System.in);
-        List<Task> tasks = new ArrayList<>();
 
         while (scanner.hasNextLine()) {
             String command = scanner.nextLine().trim();
@@ -52,6 +54,7 @@ public class ET {
                 try {
                     int taskIndex = getTaskIndex(command, commandType, tasks.size());
                     tasks.get(taskIndex).markAsDone();
+                    saveTasks(storage, tasks);
                     System.out.println("     Nice! I've marked this task as done:");
                     System.out.println("       " + tasks.get(taskIndex));
                 } catch (ETException e) {
@@ -61,6 +64,7 @@ public class ET {
                 try {
                     int taskIndex = getTaskIndex(command, commandType, tasks.size());
                     tasks.get(taskIndex).markAsNotDone();
+                    saveTasks(storage, tasks);
                     System.out.println("     OK, I've marked this task as not done yet:");
                     System.out.println("       " + tasks.get(taskIndex));
                 } catch (ETException e) {
@@ -70,6 +74,7 @@ public class ET {
                 try {
                     int taskIndex = getTaskIndex(command, commandType, tasks.size());
                     Task removedTask = tasks.remove(taskIndex);
+                    saveTasks(storage, tasks);
                     System.out.println("     Noted. I've removed this task:");
                     System.out.println("       " + removedTask);
                     System.out.println("     Now you have " + tasks.size() + " tasks in the list.");
@@ -80,6 +85,7 @@ public class ET {
                 try {
                     Task task = parseTask(command, commandType);
                     tasks.add(task);
+                    saveTasks(storage, tasks);
                     System.out.println("     Got it. I've added this task:");
                     System.out.println("       " + task);
                     System.out.println(
@@ -90,6 +96,35 @@ public class ET {
             }
 
             System.out.println("____________________________________________________________");
+        }
+    }
+
+    /**
+     * Loads saved tasks while allowing ET to continue when the storage file is unavailable.
+     *
+     * @param storage the component that reads ET's task file
+     * @return the loaded tasks, or an empty list when reading fails
+     */
+    private static List<Task> loadTasks(Storage storage) {
+        try {
+            return storage.load();
+        } catch (IOException e) {
+            System.out.println("     I couldn't load your saved tasks, so I'm starting with an empty list.");
+            return new ArrayList<>();
+        }
+    }
+
+    /**
+     * Saves the task list after a command changes it.
+     *
+     * @param storage the component that writes ET's task file
+     * @param tasks the current tasks to save
+     */
+    private static void saveTasks(Storage storage, List<Task> tasks) {
+        try {
+            storage.save(tasks);
+        } catch (IOException e) {
+            System.out.println("     Your task was changed, but I couldn't save it to disk.");
         }
     }
 

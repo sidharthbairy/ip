@@ -69,6 +69,16 @@ def verify_java_version(required_version: str) -> bool:
     return True
 
 
+def reset_storage(root: Path) -> None:
+    """Remove ET's generated storage file so UI cases remain independent."""
+    storage_file = root / "data" / "tasks.txt"
+    storage_file.unlink(missing_ok=True)
+    try:
+        storage_file.parent.rmdir()
+    except OSError:
+        pass
+
+
 def main() -> int:
     """Run every documented UI test until one fails."""
     parser = argparse.ArgumentParser(description=__doc__)
@@ -104,6 +114,7 @@ def main() -> int:
         print(f"Aim: {case['aim']}")
         print_block("Console input", case["input"])
 
+        reset_storage(root)
         result = run_command(configuration["Run command"], root, case["input"] + "\n")
         actual_output = normalize_output(result.stdout)
         expected_output = normalize_output(case["expected"])

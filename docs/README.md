@@ -1,7 +1,9 @@
 # ET User Guide
 
-ET keeps tasks in memory while it is running. Dates and times are stored as
-the strings that you enter, so you can use formats such as `Sunday`,
+ET saves tasks automatically in `data/tasks.txt`, relative to the project
+root, whenever you add, mark, unmark, or delete one. On startup, ET
+loads the saved tasks again. Dates and times are stored as the strings that you
+enter, so you can use formats such as `Sunday`,
 `11/10/2019 5pm`, or `Mon 2pm`.
 
 ## Adding tasks

@@ -106,6 +106,43 @@ ____________________________________________________________
 ____________________________________________________________
 ```
 
+### Save task changes before exit
+
+Aim: Verify that adding and completing a task produces the normal task-list state that ET saves automatically before it exits.
+
+Inputs:
+```text
+todo water plants
+mark 1
+bye
+```
+
+Expected output:
+```text
+____________________________________________________________
+ _____ _____
+| ____|_   _|
+|  _|   | |
+| |___  | |
+|_____| |_|
+Hello, friend! I'm ET, a gentle visitor from far away.
+I may be a little lost, but I would be happy to help with your tasks.
+What can I do for you?
+____________________________________________________________
+____________________________________________________________
+     Got it. I've added this task:
+       [T][ ] water plants
+     Now you have 1 tasks in the list.
+____________________________________________________________
+____________________________________________________________
+     Nice! I've marked this task as done:
+       [T][X] water plants
+____________________________________________________________
+____________________________________________________________
+     Bye. Hope to see you again soon!
+____________________________________________________________
+```
+
 ### Delete a task and renumber the remaining list
 
 Aim: Verify that deleting a task removes the requested task, reports the new count, and renumbers the remaining tasks.
