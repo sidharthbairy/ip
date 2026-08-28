@@ -50,14 +50,15 @@ public class Parser {
         default:
             break;
         }
-        throw new ETException("I don't recognise that command. Try todo, deadline, event, list, mark, unmark, delete, or bye.");
+        throw new ETException("I don't recognize that command. Try todo, deadline, event, list, mark, unmark, "
+                + "delete, or bye.");
     }
 
     /**
      * Converts a task-creation command into a task, including its date and time input.
      *
      * @param command the command entered by the user
-     * @param commandType the recognised type of the command
+     * @param commandType the recognized type of the command
      * @return the task represented by the command
      * @throws ETException if the command is unknown or missing required information
      */

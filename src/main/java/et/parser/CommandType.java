@@ -1,7 +1,7 @@
 package et.parser;
 
 /**
- * Represents a command ET can recognise from the first word of user input.
+ * Represents a command ET can recognize from the first word of user input.
  */
 public enum CommandType {
     TODO("todo"),

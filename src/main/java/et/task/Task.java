@@ -1,7 +1,7 @@
 package et.task;
 
 /**
- * Represents the common state and behaviour of every task.
+ * Represents the common state and behavior of every task.
  *
  * <p>Specific task types inherit this class so that they can be stored in one
  * {@code List<Task>} while adding their own display details.</p>
