@@ -57,10 +57,8 @@ public class ET {
                 }
             } else {
                 try {
-                    Task task = parser.parseTask(command, commandType);
-                    tasks.addTask(task);
-                    saveTasks(storage, tasks, ui);
-                    ui.showTaskAdded(task, tasks.size());
+                    Command addCommand = parser.parseAddCommand(command, commandType);
+                    addCommand.execute(tasks, ui, storage);
                 } catch (ETException e) {
                     ui.showError(e.getMessage());
                 }
@@ -82,20 +80,6 @@ public class ET {
         } catch (IOException e) {
             ui.showLoadingError();
             return new TaskList();
-        }
-    }
-
-    /**
-     * Saves the task list after a command changes it.
-     *
-     * @param storage the component that writes ET's task file
-     * @param tasks the current tasks to save
-     */
-    private static void saveTasks(Storage storage, TaskList tasks, Ui ui) {
-        try {
-            storage.save(tasks.getTasks());
-        } catch (IOException e) {
-            ui.showSavingError();
         }
     }
 

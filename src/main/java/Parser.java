@@ -55,6 +55,18 @@ public class Parser {
     }
 
     /**
+     * Converts a task-creation command into its command object.
+     *
+     * @param command the command entered by the user
+     * @param commandType the recognised task-creation command type
+     * @return the matching add command
+     * @throws ETException if the command is unknown or missing required information
+     */
+    public Command parseAddCommand(String command, CommandType commandType) throws ETException {
+        return new AddCommand(parseTask(command, commandType));
+    }
+
+    /**
      * Converts a task-creation command into a task, including its date and time input.
      *
      * @param command the command entered by the user
