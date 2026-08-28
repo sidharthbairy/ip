@@ -1,5 +1,7 @@
+import java.util.Scanner;
+
 /**
- * Handles all messages displayed by ET in the console.
+ * Handles ET's console input and output.
  *
  * <p>Keeping presentation code here lets the application logic describe what
  * happened without also needing to know how each message is formatted.</p>
@@ -7,6 +9,27 @@
 public class Ui {
     /** Separates consecutive console messages. */
     private static final String DIVIDER = "____________________________________________________________";
+
+    /** Reads commands entered through the console without closing standard input. */
+    private final Scanner scanner = new Scanner(System.in);
+
+    /**
+     * Returns whether another complete command can be read from the console.
+     *
+     * @return {@code true} when another command is available
+     */
+    public boolean hasNextCommand() {
+        return scanner.hasNextLine();
+    }
+
+    /**
+     * Reads and trims the next command entered by the user.
+     *
+     * @return the next command without leading or trailing whitespace
+     */
+    public String readCommand() {
+        return scanner.nextLine().trim();
+    }
 
     /** Displays ET's welcome message. */
     public void showWelcome() {

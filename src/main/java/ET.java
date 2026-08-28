@@ -1,5 +1,4 @@
 import java.io.IOException;
-import java.util.Scanner;
 
 /**
  * Entry point for the ET task companion.
@@ -20,10 +19,9 @@ public class ET {
         Storage storage = new Storage();
         Parser parser = new Parser();
         TaskList tasks = loadTasks(storage, ui);
-        Scanner scanner = new Scanner(System.in);
 
-        while (scanner.hasNextLine()) {
-            String command = scanner.nextLine().trim();
+        while (ui.hasNextCommand()) {
+            String command = ui.readCommand();
             CommandType commandType = CommandType.fromInput(command);
             ui.showDivider();
 
