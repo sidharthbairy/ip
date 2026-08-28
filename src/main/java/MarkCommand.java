@@ -1,0 +1,22 @@
+/**
+ * Marks one task as completed.
+ */
+public class MarkCommand extends TaskIndexCommand {
+    /**
+     * Creates a command that marks one task as completed.
+     *
+     * @param taskIndex the zero-based index of the task to mark
+     */
+    public MarkCommand(int taskIndex) {
+        super(taskIndex);
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void execute(TaskList tasks, Ui ui, Storage storage) {
+        Task task = tasks.getTask(taskIndex);
+        task.markAsDone();
+        saveTasks(tasks, ui, storage);
+        ui.showTaskMarked(task);
+    }
+}

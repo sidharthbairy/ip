@@ -24,6 +24,24 @@ public class Parser {
     }
 
     /**
+     * Converts a mark or unmark command into its command object.
+     *
+     * @param command the command entered by the user
+     * @param commandType the recognised mark or unmark command type
+     * @param taskCount the number of tasks currently stored
+     * @return the matching task-status command
+     * @throws ETException if the task number is absent, invalid, or out of range
+     */
+    public Command parseTaskStatusCommand(String command, CommandType commandType, int taskCount)
+            throws ETException {
+        int taskIndex = parseTaskIndex(command, commandType, taskCount);
+        if (commandType == CommandType.MARK) {
+            return new MarkCommand(taskIndex);
+        }
+        return new UnmarkCommand(taskIndex);
+    }
+
+    /**
      * Converts a task-creation command into a task, including its date and time input.
      *
      * @param command the command entered by the user

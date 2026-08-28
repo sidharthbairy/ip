@@ -110,3 +110,50 @@ ____________________________________________________________
      Bye. Hope to see you again soon!
 ____________________________________________________________
 ```
+
+### Mark and unmark a task
+
+Aim: Verify that task-status commands update and display the selected task.
+
+Inputs:
+```text
+todo read notes
+mark 1
+unmark 1
+list
+bye
+```
+
+Expected output:
+```text
+____________________________________________________________
+ _____ _____
+| ____|_   _|
+|  _|   | |
+| |___  | |
+|_____| |_|
+Hello, friend! I'm ET, a gentle visitor from far away.
+I may be a little lost, but I would be happy to help with your tasks.
+What can I do for you?
+____________________________________________________________
+____________________________________________________________
+     Got it. I've added this task:
+       [T][ ] read notes
+     Now you have 1 tasks in the list.
+____________________________________________________________
+____________________________________________________________
+     Nice! I've marked this task as done:
+       [T][X] read notes
+____________________________________________________________
+____________________________________________________________
+     OK, I've marked this task as not done yet:
+       [T][ ] read notes
+____________________________________________________________
+____________________________________________________________
+     Here are the tasks in your list:
+     1.[T][ ] read notes
+____________________________________________________________
+____________________________________________________________
+     Bye. Hope to see you again soon!
+____________________________________________________________
+```
