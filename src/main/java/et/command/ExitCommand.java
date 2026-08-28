@@ -1,3 +1,9 @@
+package et.command;
+
+import et.storage.Storage;
+import et.task.TaskList;
+import et.ui.Ui;
+
 /**
  * Ends the ET session after displaying its goodbye message.
  */

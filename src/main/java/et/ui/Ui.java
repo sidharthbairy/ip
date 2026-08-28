@@ -1,3 +1,8 @@
+package et.ui;
+
+import et.task.Task;
+import et.task.TaskList;
+
 import java.util.Scanner;
 
 /**

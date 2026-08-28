@@ -1,3 +1,5 @@
+package et.task;
+
 /**
  * Represents the supported kinds of tasks and their list-display codes.
  */
