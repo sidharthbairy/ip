@@ -17,85 +17,64 @@ public class ET {
      * @param args command-line arguments, which ET does not currently use
      */
     public static void main(String[] args) {
-        String banner = " _____ _____\n"
-                + "| ____|_   _|\n"
-                + "|  _|   | |\n"
-                + "| |___  | |\n"
-                + "|_____| |_|";
-
-        System.out.println("____________________________________________________________");
-        System.out.println(banner);
-        System.out.println("Hello, friend! I'm ET, a gentle visitor from far away.");
-        System.out.println("I may be a little lost, but I would be happy to help with your tasks.");
-        System.out.println("What can I do for you?");
-        System.out.println("____________________________________________________________");
-
+        Ui ui = new Ui();
+        ui.showWelcome();
         Storage storage = new Storage();
-        List<Task> tasks = loadTasks(storage);
+        List<Task> tasks = loadTasks(storage, ui);
         Scanner scanner = new Scanner(System.in);
 
         while (scanner.hasNextLine()) {
             String command = scanner.nextLine().trim();
             CommandType commandType = CommandType.fromInput(command);
-            System.out.println("____________________________________________________________");
+            ui.showDivider();
 
             if (commandType == CommandType.BYE && command.equals("bye")) {
-                System.out.println("     Bye. Hope to see you again soon!");
-                System.out.println("____________________________________________________________");
+                ui.showGoodbye();
+                ui.showDivider();
                 break;
             }
 
             if (commandType == CommandType.LIST && command.equals("list")) {
-                System.out.println("     Here are the tasks in your list:");
-                for (int i = 0; i < tasks.size(); i++) {
-                    System.out.println("     " + (i + 1) + "." + tasks.get(i));
-                }
+                ui.showTaskList(tasks);
             } else if (commandType == CommandType.MARK) {
                 try {
                     int taskIndex = getTaskIndex(command, commandType, tasks.size());
                     tasks.get(taskIndex).markAsDone();
-                    saveTasks(storage, tasks);
-                    System.out.println("     Nice! I've marked this task as done:");
-                    System.out.println("       " + tasks.get(taskIndex));
+                    saveTasks(storage, tasks, ui);
+                    ui.showTaskMarked(tasks.get(taskIndex));
                 } catch (ETException e) {
-                    System.out.println("     " + e.getMessage());
+                    ui.showError(e.getMessage());
                 }
             } else if (commandType == CommandType.UNMARK) {
                 try {
                     int taskIndex = getTaskIndex(command, commandType, tasks.size());
                     tasks.get(taskIndex).markAsNotDone();
-                    saveTasks(storage, tasks);
-                    System.out.println("     OK, I've marked this task as not done yet:");
-                    System.out.println("       " + tasks.get(taskIndex));
+                    saveTasks(storage, tasks, ui);
+                    ui.showTaskUnmarked(tasks.get(taskIndex));
                 } catch (ETException e) {
-                    System.out.println("     " + e.getMessage());
+                    ui.showError(e.getMessage());
                 }
             } else if (commandType == CommandType.DELETE) {
                 try {
                     int taskIndex = getTaskIndex(command, commandType, tasks.size());
                     Task removedTask = tasks.remove(taskIndex);
-                    saveTasks(storage, tasks);
-                    System.out.println("     Noted. I've removed this task:");
-                    System.out.println("       " + removedTask);
-                    System.out.println("     Now you have " + tasks.size() + " tasks in the list.");
+                    saveTasks(storage, tasks, ui);
+                    ui.showTaskDeleted(removedTask, tasks.size());
                 } catch (ETException e) {
-                    System.out.println("     " + e.getMessage());
+                    ui.showError(e.getMessage());
                 }
             } else {
                 try {
                     Task task = parseTask(command, commandType);
                     tasks.add(task);
-                    saveTasks(storage, tasks);
-                    System.out.println("     Got it. I've added this task:");
-                    System.out.println("       " + task);
-                    System.out.println(
-                            "     Now you have " + tasks.size() + " tasks in the list.");
+                    saveTasks(storage, tasks, ui);
+                    ui.showTaskAdded(task, tasks.size());
                 } catch (ETException e) {
-                    System.out.println("     " + e.getMessage());
+                    ui.showError(e.getMessage());
                 }
             }
 
-            System.out.println("____________________________________________________________");
+            ui.showDivider();
         }
     }
 
@@ -105,11 +84,11 @@ public class ET {
      * @param storage the component that reads ET's task file
      * @return the loaded tasks, or an empty list when reading fails
      */
-    private static List<Task> loadTasks(Storage storage) {
+    private static List<Task> loadTasks(Storage storage, Ui ui) {
         try {
             return storage.load();
         } catch (IOException e) {
-            System.out.println("     I couldn't load your saved tasks, so I'm starting with an empty list.");
+            ui.showLoadingError();
             return new ArrayList<>();
         }
     }
@@ -120,11 +99,11 @@ public class ET {
      * @param storage the component that writes ET's task file
      * @param tasks the current tasks to save
      */
-    private static void saveTasks(Storage storage, List<Task> tasks) {
+    private static void saveTasks(Storage storage, List<Task> tasks, Ui ui) {
         try {
             storage.save(tasks);
         } catch (IOException e) {
-            System.out.println("     Your task was changed, but I couldn't save it to disk.");
+            ui.showSavingError();
         }
     }
 
