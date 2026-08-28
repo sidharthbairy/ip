@@ -54,3 +54,12 @@ ET displays it as:
 
 Use `list` to display every task. Use `mark <number>` to complete a task and
 `unmark <number>` to mark it as not done again.
+
+## Finding tasks
+
+Use `find <keyword>` to display tasks whose descriptions contain the keyword.
+The search is case-insensitive and preserves the matching tasks' list order:
+
+```
+find book
+```

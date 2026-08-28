@@ -3,6 +3,7 @@ package et.ui;
 import et.task.Task;
 import et.task.TaskList;
 
+import java.util.List;
 import java.util.Scanner;
 
 /**
@@ -66,6 +67,18 @@ public class Ui {
         System.out.println("     Here are the tasks in your list:");
         for (int i = 0; i < tasks.size(); i++) {
             System.out.println("     " + (i + 1) + "." + tasks.getTask(i));
+        }
+    }
+
+    /**
+     * Displays the tasks whose descriptions matched a search keyword.
+     *
+     * @param matchingTasks the tasks to display in matching order
+     */
+    public void showMatchingTasks(List<Task> matchingTasks) {
+        System.out.println("     Here are the matching tasks in your list:");
+        for (int i = 0; i < matchingTasks.size(); i++) {
+            System.out.println("     " + (i + 1) + "." + matchingTasks.get(i));
         }
     }
 

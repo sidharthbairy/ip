@@ -4,6 +4,7 @@ import et.command.AddCommand;
 import et.command.Command;
 import et.command.DeleteCommand;
 import et.command.ExitCommand;
+import et.command.FindCommand;
 import et.command.ListCommand;
 import et.command.MarkCommand;
 import et.command.UnmarkCommand;
@@ -36,6 +37,8 @@ public class Parser {
                 return new ListCommand();
             }
             break;
+        case FIND:
+            return new FindCommand(parseKeyword(command, commandType));
         case MARK:
             return new MarkCommand(parseTaskIndex(command, commandType));
         case UNMARK:
@@ -50,8 +53,8 @@ public class Parser {
         default:
             break;
         }
-        throw new ETException("I don't recognize that command. Try todo, deadline, event, list, mark, unmark, "
-                + "delete, or bye.");
+        throw new ETException("I don't recognize that command. Try todo, deadline, event, list, find, mark, "
+                + "unmark, delete, or bye.");
     }
 
     /**
@@ -127,6 +130,20 @@ public class Parser {
         } catch (NumberFormatException e) {
             throw new ETException("Please give a valid task number after " + commandType.getKeyword() + ".");
         }
+    }
+
+    /**
+     * Extracts the keyword used to search task descriptions.
+     *
+     * @param command the full command entered by the user
+     * @param commandType the command that accepts a search keyword
+     * @return the keyword without surrounding whitespace
+     * @throws ETException if the keyword is absent
+     */
+    private String parseKeyword(String command, CommandType commandType) throws ETException {
+        String keyword = command.substring(commandType.getKeyword().length()).trim();
+        requireText(keyword, "Please provide a keyword after find.");
+        return keyword;
     }
 
     /**

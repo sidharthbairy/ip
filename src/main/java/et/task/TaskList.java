@@ -2,6 +2,7 @@ package et.task;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Stores and provides controlled access to ET's tasks.
@@ -51,6 +52,23 @@ public class TaskList {
      */
     public Task removeTask(int taskIndex) {
         return tasks.remove(taskIndex);
+    }
+
+    /**
+     * Returns tasks whose descriptions contain the supplied keyword, ignoring letter case.
+     *
+     * @param keyword the text to search for
+     * @return matching tasks in their current list order
+     */
+    public List<Task> findTasks(String keyword) {
+        String normalizedKeyword = keyword.toLowerCase(Locale.ROOT);
+        List<Task> matchingTasks = new ArrayList<>();
+        for (Task task : tasks) {
+            if (task.getDescription().toLowerCase(Locale.ROOT).contains(normalizedKeyword)) {
+                matchingTasks.add(task);
+            }
+        }
+        return List.copyOf(matchingTasks);
     }
 
     /**
