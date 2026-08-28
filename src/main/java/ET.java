@@ -1,4 +1,5 @@
 import java.io.IOException;
+import java.util.Optional;
 
 /**
  * Entry point for the ET task companion.
@@ -25,14 +26,14 @@ public class ET {
             CommandType commandType = CommandType.fromInput(command);
             ui.showDivider();
 
-            if (commandType == CommandType.BYE && command.equals("bye")) {
-                ui.showGoodbye();
-                ui.showDivider();
-                break;
-            }
-
-            if (commandType == CommandType.LIST && command.equals("list")) {
-                ui.showTaskList(tasks);
+            Optional<Command> simpleCommand = parser.parseSimpleCommand(command);
+            if (simpleCommand.isPresent()) {
+                Command parsedCommand = simpleCommand.get();
+                parsedCommand.execute(tasks, ui, storage);
+                if (parsedCommand.isExit()) {
+                    ui.showDivider();
+                    break;
+                }
             } else if (commandType == CommandType.MARK) {
                 try {
                     int taskIndex = parser.parseTaskIndex(command, commandType, tasks.size());

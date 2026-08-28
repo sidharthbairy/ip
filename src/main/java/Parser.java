@@ -1,7 +1,28 @@
+import java.util.Optional;
+
 /**
  * Interprets user commands and converts their task-related parts into objects.
  */
 public class Parser {
+    /**
+     * Converts a command with no arguments into its command object.
+     *
+     * <p>Commands that require arguments are still handled by ET during this
+     * incremental migration and therefore return an empty result.</p>
+     *
+     * @param command the command entered by the user
+     * @return the matching simple command, or an empty result when it needs further parsing
+     */
+    public Optional<Command> parseSimpleCommand(String command) {
+        if (command.equals(CommandType.LIST.getKeyword())) {
+            return Optional.of(new ListCommand());
+        }
+        if (command.equals(CommandType.BYE.getKeyword())) {
+            return Optional.of(new ExitCommand());
+        }
+        return Optional.empty();
+    }
+
     /**
      * Converts a task-creation command into a task, including its date and time input.
      *
