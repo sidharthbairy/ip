@@ -1,31 +1,47 @@
+import java.time.LocalDateTime;
+
 /**
  * Represents a task that must be completed by a given date or time.
  */
 public class Deadline extends Task {
-    /** The due date or time, kept as entered by the user. */
-    private final String by;
+    /** The deadline's actual due date and time. */
+    private final LocalDateTime by;
+
+    /** Whether the user included a time in the deadline input. */
+    private final boolean hasTime;
 
     /**
      * Creates a deadline task that is not done yet.
      *
      * @param description the text describing the task
-     * @param by the due date or time
+     * @param by the deadline's due date and time
+     * @param hasTime whether the deadline includes a time
      */
-    public Deadline(String description, String by) {
+    public Deadline(String description, LocalDateTime by, boolean hasTime) {
         super(TaskType.DEADLINE, description);
-        if (by == null || by.isBlank()) {
-            throw new IllegalArgumentException("Deadline date or time cannot be empty.");
+        if (by == null) {
+            throw new IllegalArgumentException("Deadline date or time cannot be null.");
         }
         this.by = by;
+        this.hasTime = hasTime;
     }
 
     /**
      * Returns this deadline's due date or time.
      *
-     * @return the date or time entered after {@code /by}
+     * @return the deadline's date and time
      */
-    public String getBy() {
+    public LocalDateTime getBy() {
         return by;
+    }
+
+    /**
+     * Returns whether this deadline has a supplied time as well as a date.
+     *
+     * @return {@code true} when a time was supplied
+     */
+    public boolean hasTime() {
+        return hasTime;
     }
 
     /**
@@ -35,6 +51,6 @@ public class Deadline extends Task {
      */
     @Override
     public String toString() {
-        return super.toString() + " (by: " + by + ")";
+        return super.toString() + " (by: " + DateTimeParser.format(by, hasTime) + ")";
     }
 }

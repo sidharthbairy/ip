@@ -43,3 +43,12 @@ When proposing or creating a commit message, include enough detail to explain th
 Do not commit or push unless explicitly asked.
 When the user asks for “CTP”, commit the current in-scope changes, create a lightweight tag named after the current Codex task title (for example, `Level-6`), and push both the commit and tag without requesting further confirmation.
 Likewise, when the user asks for "CP", commit the current in-scope changes and push the commit (without a tag).
+
+Branch procedure (X refers to the current level number):
+
+1. Merge the branch back to the master branch (remember to create a merge commit, i.e., no fast-forward).
+2. Git tag the merge commit in the master branch as usual (i.e., add the tag Level-X).
+3. Push the following three things to your fork:
+(a) the master branch,
+(b) the branch-Level-X branch,
+(c) the Level-X tag.
