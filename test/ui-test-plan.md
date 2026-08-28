@@ -158,6 +158,66 @@ ____________________________________________________________
 ____________________________________________________________
 ```
 
+### Find tasks by keyword
+
+Aim: Verify that find displays every task whose description contains the keyword, regardless of letter case.
+
+Inputs:
+```text
+todo read book
+deadline return Book /by 6/6/2019
+todo buy groceries
+mark 1
+mark 2
+find book
+bye
+```
+
+Expected output:
+```text
+____________________________________________________________
+ _____ _____
+| ____|_   _|
+|  _|   | |
+| |___  | |
+|_____| |_|
+Hello, friend! I'm ET, a gentle visitor from far away.
+I may be a little lost, but I would be happy to help with your tasks.
+What can I do for you?
+____________________________________________________________
+____________________________________________________________
+     Got it. I've added this task:
+       [T][ ] read book
+     Now you have 1 tasks in the list.
+____________________________________________________________
+____________________________________________________________
+     Got it. I've added this task:
+       [D][ ] return Book (by: Jun 06 2019)
+     Now you have 2 tasks in the list.
+____________________________________________________________
+____________________________________________________________
+     Got it. I've added this task:
+       [T][ ] buy groceries
+     Now you have 3 tasks in the list.
+____________________________________________________________
+____________________________________________________________
+     Nice! I've marked this task as done:
+       [T][X] read book
+____________________________________________________________
+____________________________________________________________
+     Nice! I've marked this task as done:
+       [D][X] return Book (by: Jun 06 2019)
+____________________________________________________________
+____________________________________________________________
+     Here are the matching tasks in your list:
+     1.[T][X] read book
+     2.[D][X] return Book (by: Jun 06 2019)
+____________________________________________________________
+____________________________________________________________
+     Bye. Hope to see you again soon!
+____________________________________________________________
+```
+
 ### Delete a task
 
 Aim: Verify that deleting a task removes it from the list and reports the remaining count.

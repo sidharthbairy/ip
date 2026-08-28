@@ -4,6 +4,7 @@ import et.command.AddCommand;
 import et.command.Command;
 import et.command.DeleteCommand;
 import et.command.ExitCommand;
+import et.command.FindCommand;
 import et.command.ListCommand;
 import et.command.MarkCommand;
 import et.command.UnmarkCommand;
@@ -66,6 +67,7 @@ class ParserTest {
     @Test
     void parseCommand_controlCommands_createsMatchingCommandTypes() throws ETException {
         assertInstanceOf(ListCommand.class, parser.parseCommand("list"));
+        assertInstanceOf(FindCommand.class, parser.parseCommand("find notes"));
         assertInstanceOf(ExitCommand.class, parser.parseCommand("bye"));
         assertInstanceOf(MarkCommand.class, parser.parseCommand("mark 1"));
         assertInstanceOf(UnmarkCommand.class, parser.parseCommand("unmark 1"));
@@ -98,6 +100,7 @@ class ParserTest {
         assertThrows(ETException.class, () -> parser.parseCommand("event project meeting /from 2/1/2019"));
         assertThrows(ETException.class, () -> parser.parseCommand("event /from 2/1/2019 /to 3/1/2019"));
         assertThrows(ETException.class, () -> parser.parseCommand("mark"));
+        assertThrows(ETException.class, () -> parser.parseCommand("find"));
     }
 
     @Test
