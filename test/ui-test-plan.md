@@ -157,3 +157,45 @@ ____________________________________________________________
      Bye. Hope to see you again soon!
 ____________________________________________________________
 ```
+
+### Delete a task
+
+Aim: Verify that deleting a task removes it from the list and reports the remaining count.
+
+Inputs:
+```text
+todo feed cat
+delete 1
+list
+bye
+```
+
+Expected output:
+```text
+____________________________________________________________
+ _____ _____
+| ____|_   _|
+|  _|   | |
+| |___  | |
+|_____| |_|
+Hello, friend! I'm ET, a gentle visitor from far away.
+I may be a little lost, but I would be happy to help with your tasks.
+What can I do for you?
+____________________________________________________________
+____________________________________________________________
+     Got it. I've added this task:
+       [T][ ] feed cat
+     Now you have 1 tasks in the list.
+____________________________________________________________
+____________________________________________________________
+     Noted. I've removed this task:
+       [T][ ] feed cat
+     Now you have 0 tasks in the list.
+____________________________________________________________
+____________________________________________________________
+     Here are the tasks in your list:
+____________________________________________________________
+____________________________________________________________
+     Bye. Hope to see you again soon!
+____________________________________________________________
+```

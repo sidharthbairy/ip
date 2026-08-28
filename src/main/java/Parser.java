@@ -42,6 +42,19 @@ public class Parser {
     }
 
     /**
+     * Converts a delete command into its command object.
+     *
+     * @param command the command entered by the user
+     * @param taskCount the number of tasks currently stored
+     * @return the matching delete command
+     * @throws ETException if the task number is absent, invalid, or out of range
+     */
+    public Command parseDeleteCommand(String command, int taskCount) throws ETException {
+        int taskIndex = parseTaskIndex(command, CommandType.DELETE, taskCount);
+        return new DeleteCommand(taskIndex);
+    }
+
+    /**
      * Converts a task-creation command into a task, including its date and time input.
      *
      * @param command the command entered by the user

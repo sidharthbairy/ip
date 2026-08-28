@@ -50,10 +50,8 @@ public class ET {
                 }
             } else if (commandType == CommandType.DELETE) {
                 try {
-                    int taskIndex = parser.parseTaskIndex(command, commandType, tasks.size());
-                    Task removedTask = tasks.removeTask(taskIndex);
-                    saveTasks(storage, tasks, ui);
-                    ui.showTaskDeleted(removedTask, tasks.size());
+                    Command deleteCommand = parser.parseDeleteCommand(command, tasks.size());
+                    deleteCommand.execute(tasks, ui, storage);
                 } catch (ETException e) {
                     ui.showError(e.getMessage());
                 }
