@@ -52,3 +52,5 @@ Branch procedure (X refers to the current level number):
 (a) the master branch,
 (b) the branch-Level-X branch,
 (c) the Level-X tag.
+
+The user will use the acronym "BP" to ask you to implement the above steps.
