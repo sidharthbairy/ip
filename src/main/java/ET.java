@@ -129,8 +129,7 @@ public class ET {
     }
 
     /**
-     * Converts a command into a task. Date and time values are intentionally
-     * kept as strings because ET does not need to compare or calculate them.
+     * Converts a command into a task, including parsing date and time input.
      *
      * @param command the command entered by the user
      * @param commandType the recognised type of the command
@@ -155,7 +154,8 @@ public class ET {
             String by = remainder.substring(byMarker + "/by".length()).trim();
             requireText(description, "Please provide a description for the deadline.");
             requireText(by, "Please provide a date or time after /by.");
-            return new Deadline(description, by);
+            DateTimeParser.ParsedDateTime deadlineDate = DateTimeParser.parse(by);
+            return new Deadline(description, deadlineDate.value(), deadlineDate.hasTime());
         }
 
         if (commandType == CommandType.EVENT) {
@@ -174,7 +174,13 @@ public class ET {
             requireText(description, "Please provide a description for the event.");
             requireText(from, "Please provide a starting date or time after /from.");
             requireText(to, "Please provide an ending date or time after /to.");
-            return new Event(description, from, to);
+            DateTimeParser.ParsedDateTime startDate = DateTimeParser.parse(from);
+            DateTimeParser.ParsedDateTime endDate = DateTimeParser.parse(to);
+            if (endDate.value().isBefore(startDate.value())) {
+                throw new ETException("The event end date and time cannot be before its start.");
+            }
+            return new Event(description, startDate.value(), startDate.hasTime(),
+                    endDate.value(), endDate.hasTime());
         }
 
         throw new ETException("I don't recognise that command. Try todo, deadline, event, list, mark, unmark, delete, or bye.");

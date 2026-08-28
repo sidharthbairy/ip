@@ -85,11 +85,15 @@ public class Storage {
             break;
         case "D":
             requireFieldCount(fields, 4);
-            task = new Deadline(decode(fields[2]), decode(fields[3]));
+            DateTimeParser.ParsedDateTime deadlineDate = DateTimeParser.parseStored(decode(fields[3]));
+            task = new Deadline(decode(fields[2]), deadlineDate.value(), deadlineDate.hasTime());
             break;
         case "E":
             requireFieldCount(fields, 5);
-            task = new Event(decode(fields[2]), decode(fields[3]), decode(fields[4]));
+            DateTimeParser.ParsedDateTime startDate = DateTimeParser.parseStored(decode(fields[3]));
+            DateTimeParser.ParsedDateTime endDate = DateTimeParser.parseStored(decode(fields[4]));
+            task = new Event(decode(fields[2]), startDate.value(), startDate.hasTime(),
+                    endDate.value(), endDate.hasTime());
             break;
         default:
             throw new IllegalArgumentException("Unknown saved task type");
@@ -128,11 +132,12 @@ public class Storage {
         case DEADLINE:
             Deadline deadline = (Deadline) task;
             return String.join(FIELD_SEPARATOR, "D", status, encode(deadline.getDescription()),
-                    encode(deadline.getBy()));
+                    encode(DateTimeParser.formatForStorage(deadline.getBy(), deadline.hasTime())));
         case EVENT:
             Event event = (Event) task;
             return String.join(FIELD_SEPARATOR, "E", status, encode(event.getDescription()),
-                    encode(event.getFrom()), encode(event.getTo()));
+                    encode(DateTimeParser.formatForStorage(event.getFrom(), event.hasStartTime())),
+                    encode(DateTimeParser.formatForStorage(event.getTo(), event.hasEndTime())));
         default:
             throw new IllegalArgumentException("Unknown task type");
         }
