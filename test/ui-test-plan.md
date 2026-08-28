@@ -110,3 +110,132 @@ ____________________________________________________________
      Bye. Hope to see you again soon!
 ____________________________________________________________
 ```
+
+### Mark and unmark a task
+
+Aim: Verify that task-status commands update and display the selected task.
+
+Inputs:
+```text
+todo read notes
+mark 1
+unmark 1
+list
+bye
+```
+
+Expected output:
+```text
+____________________________________________________________
+ _____ _____
+| ____|_   _|
+|  _|   | |
+| |___  | |
+|_____| |_|
+Hello, friend! I'm ET, a gentle visitor from far away.
+I may be a little lost, but I would be happy to help with your tasks.
+What can I do for you?
+____________________________________________________________
+____________________________________________________________
+     Got it. I've added this task:
+       [T][ ] read notes
+     Now you have 1 tasks in the list.
+____________________________________________________________
+____________________________________________________________
+     Nice! I've marked this task as done:
+       [T][X] read notes
+____________________________________________________________
+____________________________________________________________
+     OK, I've marked this task as not done yet:
+       [T][ ] read notes
+____________________________________________________________
+____________________________________________________________
+     Here are the tasks in your list:
+     1.[T][ ] read notes
+____________________________________________________________
+____________________________________________________________
+     Bye. Hope to see you again soon!
+____________________________________________________________
+```
+
+### Delete a task
+
+Aim: Verify that deleting a task removes it from the list and reports the remaining count.
+
+Inputs:
+```text
+todo feed cat
+delete 1
+list
+bye
+```
+
+Expected output:
+```text
+____________________________________________________________
+ _____ _____
+| ____|_   _|
+|  _|   | |
+| |___  | |
+|_____| |_|
+Hello, friend! I'm ET, a gentle visitor from far away.
+I may be a little lost, but I would be happy to help with your tasks.
+What can I do for you?
+____________________________________________________________
+____________________________________________________________
+     Got it. I've added this task:
+       [T][ ] feed cat
+     Now you have 1 tasks in the list.
+____________________________________________________________
+____________________________________________________________
+     Noted. I've removed this task:
+       [T][ ] feed cat
+     Now you have 0 tasks in the list.
+____________________________________________________________
+____________________________________________________________
+     Here are the tasks in your list:
+____________________________________________________________
+____________________________________________________________
+     Bye. Hope to see you again soon!
+____________________________________________________________
+```
+
+### Reject invalid task numbers
+
+Aim: Verify that malformed and unavailable task numbers show the existing helpful errors.
+
+Inputs:
+```text
+todo read notes
+mark first
+delete 2
+bye
+```
+
+Expected output:
+```text
+____________________________________________________________
+ _____ _____
+| ____|_   _|
+|  _|   | |
+| |___  | |
+|_____| |_|
+Hello, friend! I'm ET, a gentle visitor from far away.
+I may be a little lost, but I would be happy to help with your tasks.
+What can I do for you?
+____________________________________________________________
+____________________________________________________________
+     Got it. I've added this task:
+       [T][ ] read notes
+     Now you have 1 tasks in the list.
+____________________________________________________________
+____________________________________________________________
+     Please give a valid task number after mark.
+____________________________________________________________
+____________________________________________________________
+     That task number is not in the current list.
+____________________________________________________________
+____________________________________________________________
+     Bye. Hope to see you again soon!
+____________________________________________________________
+```
