@@ -28,3 +28,20 @@ Prerequisites: JDK 25, update Intellij to the most recent version.
    ```
 
 **Warning:** Keep the `src\main\java` folder as the root folder for Java files (i.e., don't rename those folders or move Java files to another folder outside of this folder path), as this is the default location some tools (e.g., Gradle) expect to find Java files.
+
+## Creating and running the application JAR
+
+The project uses the Shadow Gradle plugin to create an executable **fat JAR**: a single JAR that contains ET and all of its runtime dependencies.
+
+1. From the project root, build the JAR:
+   ```bash
+   ./gradlew shadowJar
+   ```
+   On Windows, use `gradlew.bat shadowJar`.
+1. Find the generated file at `build/libs/et.jar`.
+1. Run ET with Java 25:
+   ```bash
+   java -jar build/libs/et.jar
+   ```
+
+You can also use `./gradlew clean shadowJar` when you want Gradle to remove previous build output before creating a fresh JAR.
