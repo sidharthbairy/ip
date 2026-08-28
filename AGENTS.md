@@ -52,6 +52,11 @@ After every code change, review and update the relevant JUnit tests to keep this
 
 ## Git
 
+Before creating a branch, proposing a commit message, or preparing a commit,
+you must load and follow the project-specific `$seedu-git-standard` skill at
+`.codex/skills/seedu-git-standard/SKILL.md`. It implements the SE-EDU Git
+conventions and is mandatory for all future commits in this project.
+
 Use lightweight tags unless the user requests an annotated tag.
 When proposing or creating a commit message, include enough detail to explain the rationale for the change.
 Do not commit or push unless explicitly asked.
