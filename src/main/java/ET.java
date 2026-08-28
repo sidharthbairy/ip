@@ -1,80 +1,57 @@
 import java.io.IOException;
-import java.util.Optional;
 
 /**
  * Entry point for the ET task companion.
  */
 public class ET {
-    /** Prevents instantiation of this entry-point class. */
-    private ET() {
+    /** The component that handles console input and output. */
+    private final Ui ui;
+
+    /** The component that loads and saves the task list. */
+    private final Storage storage;
+
+    /** The component that converts user input into commands. */
+    private final Parser parser;
+
+    /** The tasks managed during the current ET session. */
+    private TaskList tasks;
+
+    /** Creates ET's collaborating components. */
+    public ET() {
+        ui = new Ui();
+        storage = new Storage();
+        parser = new Parser();
     }
 
     /**
-     * Starts ET and processes commands from standard input.
-     *
-     * @param args command-line arguments, which ET does not currently use
+     * Starts ET and processes commands from standard input until an exit command is run.
      */
-    public static void main(String[] args) {
-        Ui ui = new Ui();
+    public void run() {
         ui.showWelcome();
-        Storage storage = new Storage();
-        Parser parser = new Parser();
-        TaskList tasks = loadTasks(storage, ui);
+        tasks = loadTasks();
+        boolean isExit = false;
 
-        while (ui.hasNextCommand()) {
-            String command = ui.readCommand();
-            CommandType commandType = CommandType.fromInput(command);
-            ui.showDivider();
-
-            Optional<Command> simpleCommand = parser.parseSimpleCommand(command);
-            if (simpleCommand.isPresent()) {
-                Command parsedCommand = simpleCommand.get();
-                parsedCommand.execute(tasks, ui, storage);
-                if (parsedCommand.isExit()) {
-                    ui.showDivider();
-                    break;
-                }
-            } else if (commandType == CommandType.MARK) {
-                try {
-                    Command taskStatusCommand = parser.parseTaskStatusCommand(command, commandType, tasks.size());
-                    taskStatusCommand.execute(tasks, ui, storage);
-                } catch (ETException e) {
-                    ui.showError(e.getMessage());
-                }
-            } else if (commandType == CommandType.UNMARK) {
-                try {
-                    Command taskStatusCommand = parser.parseTaskStatusCommand(command, commandType, tasks.size());
-                    taskStatusCommand.execute(tasks, ui, storage);
-                } catch (ETException e) {
-                    ui.showError(e.getMessage());
-                }
-            } else if (commandType == CommandType.DELETE) {
-                try {
-                    Command deleteCommand = parser.parseDeleteCommand(command, tasks.size());
-                    deleteCommand.execute(tasks, ui, storage);
-                } catch (ETException e) {
-                    ui.showError(e.getMessage());
-                }
-            } else {
-                try {
-                    Command addCommand = parser.parseAddCommand(command, commandType);
-                    addCommand.execute(tasks, ui, storage);
-                } catch (ETException e) {
-                    ui.showError(e.getMessage());
-                }
+        while (!isExit && ui.hasNextCommand()) {
+            try {
+                String fullCommand = ui.readCommand();
+                ui.showDivider();
+                Command command = parser.parseCommand(fullCommand);
+                command.execute(tasks, ui, storage);
+                isExit = command.isExit();
+            } catch (ETException e) {
+                ui.showError(e.getMessage());
+            } finally {
+                ui.showDivider();
             }
-
-            ui.showDivider();
         }
     }
 
     /**
      * Loads saved tasks while allowing ET to continue when the storage file is unavailable.
      *
-     * @param storage the component that reads ET's task file
      * @return the loaded tasks, or an empty list when reading fails
      */
-    private static TaskList loadTasks(Storage storage, Ui ui) {
+    private TaskList loadTasks() {
         try {
             return new TaskList(storage.load());
         } catch (IOException e) {
@@ -83,4 +60,8 @@ public class ET {
         }
     }
 
+    /** Starts the ET application. */
+    public static void main(String[] args) {
+        new ET().run();
+    }
 }

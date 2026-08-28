@@ -13,8 +13,9 @@ public class DeleteCommand extends TaskIndexCommand {
 
     /** {@inheritDoc} */
     @Override
-    public void execute(TaskList tasks, Ui ui, Storage storage) {
-        Task removedTask = tasks.removeTask(taskIndex);
+    public void execute(TaskList tasks, Ui ui, Storage storage) throws ETException {
+        Task removedTask = getTask(tasks);
+        tasks.removeTask(taskIndex);
         saveTasks(tasks, ui, storage);
         ui.showTaskDeleted(removedTask, tasks.size());
     }

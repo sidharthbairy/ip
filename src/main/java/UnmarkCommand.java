@@ -13,8 +13,8 @@ public class UnmarkCommand extends TaskIndexCommand {
 
     /** {@inheritDoc} */
     @Override
-    public void execute(TaskList tasks, Ui ui, Storage storage) {
-        Task task = tasks.getTask(taskIndex);
+    public void execute(TaskList tasks, Ui ui, Storage storage) throws ETException {
+        Task task = getTask(tasks);
         task.markAsNotDone();
         saveTasks(tasks, ui, storage);
         ui.showTaskUnmarked(task);

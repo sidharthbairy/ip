@@ -13,8 +13,8 @@ public class MarkCommand extends TaskIndexCommand {
 
     /** {@inheritDoc} */
     @Override
-    public void execute(TaskList tasks, Ui ui, Storage storage) {
-        Task task = tasks.getTask(taskIndex);
+    public void execute(TaskList tasks, Ui ui, Storage storage) throws ETException {
+        Task task = getTask(tasks);
         task.markAsDone();
         saveTasks(tasks, ui, storage);
         ui.showTaskMarked(task);

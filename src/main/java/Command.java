@@ -11,7 +11,7 @@ public abstract class Command {
      * @param ui the component used to communicate with the user
      * @param storage the component used to persist tasks
      */
-    public abstract void execute(TaskList tasks, Ui ui, Storage storage);
+    public abstract void execute(TaskList tasks, Ui ui, Storage storage) throws ETException;
 
     /**
      * Saves the current task list and reports an error if saving fails.

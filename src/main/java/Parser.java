@@ -1,69 +1,41 @@
-import java.util.Optional;
-
 /**
  * Interprets user commands and converts their task-related parts into objects.
  */
 public class Parser {
     /**
-     * Converts a command with no arguments into its command object.
-     *
-     * <p>Commands that require arguments are still handled by ET during this
-     * incremental migration and therefore return an empty result.</p>
+     * Converts one full user command into the command object that will execute it.
      *
      * @param command the command entered by the user
-     * @return the matching simple command, or an empty result when it needs further parsing
-     */
-    public Optional<Command> parseSimpleCommand(String command) {
-        if (command.equals(CommandType.LIST.getKeyword())) {
-            return Optional.of(new ListCommand());
-        }
-        if (command.equals(CommandType.BYE.getKeyword())) {
-            return Optional.of(new ExitCommand());
-        }
-        return Optional.empty();
-    }
-
-    /**
-     * Converts a mark or unmark command into its command object.
-     *
-     * @param command the command entered by the user
-     * @param commandType the recognised mark or unmark command type
-     * @param taskCount the number of tasks currently stored
-     * @return the matching task-status command
-     * @throws ETException if the task number is absent, invalid, or out of range
-     */
-    public Command parseTaskStatusCommand(String command, CommandType commandType, int taskCount)
-            throws ETException {
-        int taskIndex = parseTaskIndex(command, commandType, taskCount);
-        if (commandType == CommandType.MARK) {
-            return new MarkCommand(taskIndex);
-        }
-        return new UnmarkCommand(taskIndex);
-    }
-
-    /**
-     * Converts a delete command into its command object.
-     *
-     * @param command the command entered by the user
-     * @param taskCount the number of tasks currently stored
-     * @return the matching delete command
-     * @throws ETException if the task number is absent, invalid, or out of range
-     */
-    public Command parseDeleteCommand(String command, int taskCount) throws ETException {
-        int taskIndex = parseTaskIndex(command, CommandType.DELETE, taskCount);
-        return new DeleteCommand(taskIndex);
-    }
-
-    /**
-     * Converts a task-creation command into its command object.
-     *
-     * @param command the command entered by the user
-     * @param commandType the recognised task-creation command type
-     * @return the matching add command
+     * @return the matching command object
      * @throws ETException if the command is unknown or missing required information
      */
-    public Command parseAddCommand(String command, CommandType commandType) throws ETException {
-        return new AddCommand(parseTask(command, commandType));
+    public Command parseCommand(String command) throws ETException {
+        CommandType commandType = CommandType.fromInput(command);
+        switch (commandType) {
+        case TODO:
+        case DEADLINE:
+        case EVENT:
+            return new AddCommand(parseTask(command, commandType));
+        case LIST:
+            if (command.equals(CommandType.LIST.getKeyword())) {
+                return new ListCommand();
+            }
+            break;
+        case MARK:
+            return new MarkCommand(parseTaskIndex(command, commandType));
+        case UNMARK:
+            return new UnmarkCommand(parseTaskIndex(command, commandType));
+        case DELETE:
+            return new DeleteCommand(parseTaskIndex(command, commandType));
+        case BYE:
+            if (command.equals(CommandType.BYE.getKeyword())) {
+                return new ExitCommand();
+            }
+            break;
+        default:
+            break;
+        }
+        throw new ETException("I don't recognise that command. Try todo, deadline, event, list, mark, unmark, delete, or bye.");
     }
 
     /**
@@ -74,7 +46,7 @@ public class Parser {
      * @return the task represented by the command
      * @throws ETException if the command is unknown or missing required information
      */
-    public Task parseTask(String command, CommandType commandType) throws ETException {
+    private Task parseTask(String command, CommandType commandType) throws ETException {
         if (commandType == CommandType.TODO) {
             String description = command.substring(commandType.getKeyword().length()).trim();
             requireText(description, "Please provide a description for the ToDo.");
@@ -121,27 +93,21 @@ public class Parser {
                     endDate.value(), endDate.hasTime());
         }
 
-        throw new ETException("I don't recognise that command. Try todo, deadline, event, list, mark, unmark, delete, or bye.");
+        throw new IllegalArgumentException("Unsupported task command");
     }
 
     /**
-     * Extracts and validates the one-based task number used by task commands.
+     * Extracts the one-based task number used by task commands.
      *
      * @param command the full command entered by the user
      * @param commandType the command that accepts a task number
-     * @param taskCount the number of tasks currently stored
      * @return the zero-based index of the referenced task
-     * @throws ETException if the task number is absent, invalid, or out of range
+     * @throws ETException if the task number is absent or invalid
      */
-    public int parseTaskIndex(String command, CommandType commandType, int taskCount)
-            throws ETException {
+    private int parseTaskIndex(String command, CommandType commandType) throws ETException {
         String taskNumber = command.substring(commandType.getKeyword().length()).trim();
         try {
-            int taskIndex = Integer.parseInt(taskNumber) - 1;
-            if (taskIndex < 0 || taskIndex >= taskCount) {
-                throw new ETException("That task number is not in the current list.");
-            }
-            return taskIndex;
+            return Integer.parseInt(taskNumber) - 1;
         } catch (NumberFormatException e) {
             throw new ETException("Please give a valid task number after " + commandType.getKeyword() + ".");
         }

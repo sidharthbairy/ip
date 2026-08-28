@@ -199,3 +199,43 @@ ____________________________________________________________
      Bye. Hope to see you again soon!
 ____________________________________________________________
 ```
+
+### Reject invalid task numbers
+
+Aim: Verify that malformed and unavailable task numbers show the existing helpful errors.
+
+Inputs:
+```text
+todo read notes
+mark first
+delete 2
+bye
+```
+
+Expected output:
+```text
+____________________________________________________________
+ _____ _____
+| ____|_   _|
+|  _|   | |
+| |___  | |
+|_____| |_|
+Hello, friend! I'm ET, a gentle visitor from far away.
+I may be a little lost, but I would be happy to help with your tasks.
+What can I do for you?
+____________________________________________________________
+____________________________________________________________
+     Got it. I've added this task:
+       [T][ ] read notes
+     Now you have 1 tasks in the list.
+____________________________________________________________
+____________________________________________________________
+     Please give a valid task number after mark.
+____________________________________________________________
+____________________________________________________________
+     That task number is not in the current list.
+____________________________________________________________
+____________________________________________________________
+     Bye. Hope to see you again soon!
+____________________________________________________________
+```
