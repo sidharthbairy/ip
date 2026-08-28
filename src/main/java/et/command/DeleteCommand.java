@@ -1,3 +1,11 @@
+package et.command;
+
+import et.exception.ETException;
+import et.storage.Storage;
+import et.task.Task;
+import et.task.TaskList;
+import et.ui.Ui;
+
 /**
  * Removes one task from ET's task list.
  */

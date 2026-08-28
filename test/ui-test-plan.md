@@ -3,8 +3,8 @@
 ## Test configuration
 
 - Required Java version: `25`
-- Compile command: `javac -Xlint:all -d out src/main/java/*.java`
-- Run command: `java -cp out ET`
+- Compile command: `javac -Xlint:all -d out $(find src/main/java -name '*.java')`
+- Run command: `java -cp out et.ET`
 
 ## Test cases
 

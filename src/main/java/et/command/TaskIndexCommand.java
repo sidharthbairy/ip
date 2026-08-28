@@ -1,3 +1,9 @@
+package et.command;
+
+import et.exception.ETException;
+import et.task.Task;
+import et.task.TaskList;
+
 /**
  * Provides a common task reference for commands that update one existing task.
  */

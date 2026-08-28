@@ -1,3 +1,5 @@
+package et.parser;
+
 /**
  * Represents a command ET can recognise from the first word of user input.
  */

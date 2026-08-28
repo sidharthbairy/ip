@@ -1,3 +1,5 @@
+package et.task;
+
 /**
  * Represents the common state and behaviour of every task.
  *

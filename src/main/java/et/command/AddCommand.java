@@ -1,3 +1,10 @@
+package et.command;
+
+import et.storage.Storage;
+import et.task.Task;
+import et.task.TaskList;
+import et.ui.Ui;
+
 /**
  * Adds one parsed task to ET's task list.
  */
