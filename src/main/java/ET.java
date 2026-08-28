@@ -1,6 +1,4 @@
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 
 /**
@@ -21,7 +19,7 @@ public class ET {
         ui.showWelcome();
         Storage storage = new Storage();
         Parser parser = new Parser();
-        List<Task> tasks = loadTasks(storage, ui);
+        TaskList tasks = loadTasks(storage, ui);
         Scanner scanner = new Scanner(System.in);
 
         while (scanner.hasNextLine()) {
@@ -40,25 +38,25 @@ public class ET {
             } else if (commandType == CommandType.MARK) {
                 try {
                     int taskIndex = parser.parseTaskIndex(command, commandType, tasks.size());
-                    tasks.get(taskIndex).markAsDone();
+                    tasks.getTask(taskIndex).markAsDone();
                     saveTasks(storage, tasks, ui);
-                    ui.showTaskMarked(tasks.get(taskIndex));
+                    ui.showTaskMarked(tasks.getTask(taskIndex));
                 } catch (ETException e) {
                     ui.showError(e.getMessage());
                 }
             } else if (commandType == CommandType.UNMARK) {
                 try {
                     int taskIndex = parser.parseTaskIndex(command, commandType, tasks.size());
-                    tasks.get(taskIndex).markAsNotDone();
+                    tasks.getTask(taskIndex).markAsNotDone();
                     saveTasks(storage, tasks, ui);
-                    ui.showTaskUnmarked(tasks.get(taskIndex));
+                    ui.showTaskUnmarked(tasks.getTask(taskIndex));
                 } catch (ETException e) {
                     ui.showError(e.getMessage());
                 }
             } else if (commandType == CommandType.DELETE) {
                 try {
                     int taskIndex = parser.parseTaskIndex(command, commandType, tasks.size());
-                    Task removedTask = tasks.remove(taskIndex);
+                    Task removedTask = tasks.removeTask(taskIndex);
                     saveTasks(storage, tasks, ui);
                     ui.showTaskDeleted(removedTask, tasks.size());
                 } catch (ETException e) {
@@ -67,7 +65,7 @@ public class ET {
             } else {
                 try {
                     Task task = parser.parseTask(command, commandType);
-                    tasks.add(task);
+                    tasks.addTask(task);
                     saveTasks(storage, tasks, ui);
                     ui.showTaskAdded(task, tasks.size());
                 } catch (ETException e) {
@@ -85,12 +83,12 @@ public class ET {
      * @param storage the component that reads ET's task file
      * @return the loaded tasks, or an empty list when reading fails
      */
-    private static List<Task> loadTasks(Storage storage, Ui ui) {
+    private static TaskList loadTasks(Storage storage, Ui ui) {
         try {
-            return storage.load();
+            return new TaskList(storage.load());
         } catch (IOException e) {
             ui.showLoadingError();
-            return new ArrayList<>();
+            return new TaskList();
         }
     }
 
@@ -100,9 +98,9 @@ public class ET {
      * @param storage the component that writes ET's task file
      * @param tasks the current tasks to save
      */
-    private static void saveTasks(Storage storage, List<Task> tasks, Ui ui) {
+    private static void saveTasks(Storage storage, TaskList tasks, Ui ui) {
         try {
-            storage.save(tasks);
+            storage.save(tasks.getTasks());
         } catch (IOException e) {
             ui.showSavingError();
         }
