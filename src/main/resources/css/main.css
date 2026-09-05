@@ -1,0 +1,350 @@
+.root {
+    -fx-background-color: #080d20;
+    -fx-font-family: "Avenir Next", "Segoe UI", sans-serif;
+    -fx-font-size: 14px;
+}
+
+.app-shell {
+    -fx-background-color: #080d20;
+}
+
+.app-header {
+    -fx-background-color: linear-gradient(to bottom right, #19234b, #101735 58%, #0b1128);
+    -fx-border-color: transparent transparent rgba(147, 171, 231, 0.2) transparent;
+    -fx-border-width: 0 0 1px 0;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.35), 18, 0.18, 0, 6);
+}
+
+.brand-mark {
+    -fx-alignment: center;
+    -fx-background-color: rgba(247, 211, 138, 0.1);
+    -fx-background-radius: 24px;
+    -fx-border-color: #f4d58d;
+    -fx-border-radius: 24px;
+    -fx-border-width: 1.5px;
+    -fx-min-height: 46px;
+    -fx-min-width: 46px;
+    -fx-text-fill: #fff1c7;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-effect: dropshadow(gaussian, rgba(244, 213, 141, 0.32), 15, 0.22, 0, 0);
+}
+
+.app-kicker {
+    -fx-text-fill: #8fa2d2;
+    -fx-font-size: 9px;
+    -fx-font-weight: bold;
+}
+
+.app-title {
+    -fx-text-fill: #f4f7ff;
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+}
+
+.tagline {
+    -fx-padding: 0 0 0 59px;
+    -fx-text-fill: #b6c2e4;
+    -fx-font-size: 12px;
+    -fx-font-style: italic;
+}
+
+.status-pill {
+    -fx-background-color: rgba(99, 224, 177, 0.08);
+    -fx-background-radius: 14px;
+    -fx-border-color: rgba(99, 224, 177, 0.24);
+    -fx-border-radius: 14px;
+    -fx-padding: 6px 10px;
+}
+
+.status-dot {
+    -fx-background-color: #63e0b1;
+    -fx-background-radius: 4px;
+    -fx-min-height: 7px;
+    -fx-min-width: 7px;
+    -fx-effect: dropshadow(gaussian, rgba(99, 224, 177, 0.75), 7, 0.45, 0, 0);
+}
+
+.status-text {
+    -fx-text-fill: #8bedc8;
+    -fx-font-size: 9px;
+    -fx-font-weight: bold;
+}
+
+.conversation-area,
+.space-backdrop {
+    -fx-background-color: linear-gradient(to bottom, #0c1229, #111a36 60%, #0b1229);
+}
+
+.moon-glow {
+    -fx-fill: rgba(122, 137, 230, 0.08);
+    -fx-effect: dropshadow(gaussian, rgba(117, 137, 238, 0.24), 55, 0.35, 0, 0);
+}
+
+.star {
+    -fx-fill: rgba(211, 223, 255, 0.24);
+}
+
+.star-bright {
+    -fx-fill: rgba(255, 239, 193, 0.62);
+    -fx-effect: dropshadow(gaussian, rgba(255, 225, 154, 0.65), 7, 0.35, 0, 0);
+}
+
+.dialog-scroll,
+.dialog-scroll > .viewport {
+    -fx-background-color: transparent;
+}
+
+.dialog-scroll {
+    -fx-border-color: transparent;
+    -fx-padding: 0;
+}
+
+.dialog-container {
+    -fx-background-color: transparent;
+}
+
+.dialog-row {
+    -fx-padding: 2px 0;
+}
+
+.message-author {
+    -fx-font-size: 9px;
+    -fx-font-weight: bold;
+}
+
+.et-message-author {
+    -fx-text-fill: #86d8cf;
+}
+
+.user-message-author {
+    -fx-text-fill: #aebcf0;
+}
+
+.avatar {
+    -fx-alignment: center;
+    -fx-background-radius: 22px;
+    -fx-border-radius: 22px;
+    -fx-min-width: 43px;
+    -fx-min-height: 43px;
+    -fx-font-size: 10px;
+    -fx-font-weight: bold;
+}
+
+.et-avatar {
+    -fx-background-color: linear-gradient(to bottom right, #184f56, #102f3e);
+    -fx-border-color: #65d3c7;
+    -fx-text-fill: #cffff8;
+    -fx-effect: dropshadow(gaussian, rgba(101, 211, 199, 0.3), 12, 0.25, 0, 2);
+}
+
+.user-avatar {
+    -fx-background-color: linear-gradient(to bottom right, #6654c8, #3d3a86);
+    -fx-border-color: #a9b4ff;
+    -fx-text-fill: #f0f2ff;
+    -fx-effect: dropshadow(gaussian, rgba(129, 113, 231, 0.3), 12, 0.25, 0, 2);
+}
+
+.et-bubble,
+.user-bubble {
+    -fx-background-radius: 4px 17px 17px 17px;
+    -fx-padding: 13px 17px;
+}
+
+.et-bubble {
+    -fx-background-color: rgba(24, 36, 66, 0.96);
+    -fx-border-color: rgba(101, 211, 199, 0.22);
+    -fx-border-radius: 4px 17px 17px 17px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.24), 14, 0.12, 0, 5);
+}
+
+.response-line {
+    -fx-line-spacing: 2px;
+    -fx-text-fill: #e9efff;
+}
+
+.user-bubble {
+    -fx-background-color: linear-gradient(to bottom right, #6656d9, #4840a3);
+    -fx-background-radius: 17px 4px 17px 17px;
+    -fx-text-fill: #ffffff;
+    -fx-effect: dropshadow(gaussian, rgba(63, 49, 144, 0.38), 14, 0.16, 0, 5);
+}
+
+.task-card {
+    -fx-background-color: rgba(9, 17, 39, 0.58);
+    -fx-background-radius: 11px;
+    -fx-border-color: rgba(139, 160, 220, 0.16);
+    -fx-border-radius: 11px;
+    -fx-padding: 8px 10px;
+}
+
+.task-card-complete {
+    -fx-background-color: rgba(27, 73, 73, 0.36);
+    -fx-border-color: rgba(99, 224, 177, 0.25);
+}
+
+.task-number {
+    -fx-alignment: center;
+    -fx-background-color: rgba(132, 148, 209, 0.16);
+    -fx-background-radius: 10px;
+    -fx-min-height: 21px;
+    -fx-min-width: 21px;
+    -fx-text-fill: #aebbe3;
+    -fx-font-size: 9px;
+    -fx-font-weight: bold;
+}
+
+.task-type-icon {
+    -fx-alignment: center;
+    -fx-background-radius: 9px;
+    -fx-min-height: 29px;
+    -fx-min-width: 29px;
+    -fx-pref-height: 29px;
+    -fx-pref-width: 29px;
+}
+
+.task-type-glyph {
+    -fx-fill: transparent;
+    -fx-stroke-line-cap: round;
+    -fx-stroke-line-join: round;
+    -fx-stroke-width: 1.6px;
+}
+
+.todo-type {
+    -fx-background-color: rgba(99, 224, 177, 0.12);
+}
+
+.todo-type .task-type-glyph {
+    -fx-stroke: #78e5bc;
+}
+
+.deadline-type {
+    -fx-background-color: rgba(245, 190, 94, 0.13);
+}
+
+.deadline-type .task-type-glyph {
+    -fx-stroke: #f5c66f;
+}
+
+.event-type {
+    -fx-background-color: rgba(166, 135, 244, 0.14);
+}
+
+.event-type .task-type-glyph {
+    -fx-stroke: #b9a1ff;
+}
+
+.task-status {
+    -fx-alignment: center;
+    -fx-min-height: 22px;
+    -fx-min-width: 22px;
+    -fx-pref-height: 22px;
+    -fx-pref-width: 22px;
+}
+
+.task-status-incomplete .status-ring {
+    -fx-fill: rgba(116, 132, 180, 0.08);
+    -fx-stroke: #7180aa;
+    -fx-stroke-width: 1.4px;
+}
+
+.task-status-complete .status-ring {
+    -fx-fill: #63e0b1;
+    -fx-stroke: #a0f4d5;
+    -fx-stroke-width: 1.2px;
+    -fx-effect: dropshadow(gaussian, rgba(99, 224, 177, 0.38), 8, 0.3, 0, 0);
+}
+
+.task-checkmark {
+    -fx-fill: transparent;
+    -fx-stroke: #102b2d;
+    -fx-stroke-line-cap: round;
+    -fx-stroke-line-join: round;
+    -fx-stroke-width: 2.2px;
+}
+
+.task-description {
+    -fx-text-fill: #edf2ff;
+}
+
+.task-card-complete .task-description {
+    -fx-text-fill: #b9d9d3;
+}
+
+.composer {
+    -fx-background-color: linear-gradient(to bottom, #0c1229, #090e20);
+    -fx-border-color: rgba(145, 165, 219, 0.18) transparent transparent transparent;
+    -fx-border-width: 1px 0 0 0;
+}
+
+.input-hint {
+    -fx-padding: 0 0 0 3px;
+    -fx-text-fill: #6f82b5;
+    -fx-font-size: 9px;
+    -fx-font-weight: bold;
+}
+
+.command-field {
+    -fx-background-color: #131c3a;
+    -fx-background-radius: 22px;
+    -fx-border-color: #27345f;
+    -fx-border-radius: 22px;
+    -fx-border-width: 1px;
+    -fx-padding: 12px 17px;
+    -fx-prompt-text-fill: #6f7fa8;
+    -fx-text-fill: #f1f4ff;
+}
+
+.command-field:focused {
+    -fx-background-color: #162143;
+    -fx-border-color: #7f8ee8;
+    -fx-effect: dropshadow(gaussian, rgba(110, 126, 226, 0.28), 10, 0.22, 0, 0);
+}
+
+.send-button {
+    -fx-background-color: linear-gradient(to bottom right, #f2d189, #d8a94f);
+    -fx-background-radius: 22px;
+    -fx-border-color: #ffe8af;
+    -fx-border-radius: 22px;
+    -fx-cursor: hand;
+    -fx-font-size: 10px;
+    -fx-font-weight: bold;
+    -fx-padding: 12px 20px;
+    -fx-text-fill: #1a2041;
+    -fx-effect: dropshadow(gaussian, rgba(216, 169, 79, 0.3), 12, 0.18, 0, 3);
+}
+
+.send-button:hover {
+    -fx-background-color: linear-gradient(to bottom right, #ffe5aa, #e3b85f);
+}
+
+.send-button:pressed {
+    -fx-background-color: #cf9f45;
+    -fx-translate-y: 1px;
+}
+
+.scroll-bar:vertical {
+    -fx-background-color: transparent;
+    -fx-pref-width: 8px;
+}
+
+.scroll-bar:vertical .thumb {
+    -fx-background-color: rgba(134, 151, 208, 0.32);
+    -fx-background-radius: 4px;
+}
+
+.scroll-bar:vertical .track {
+    -fx-background-color: transparent;
+}
+
+.scroll-bar:vertical .increment-button,
+.scroll-bar:vertical .decrement-button {
+    -fx-background-color: transparent;
+    -fx-padding: 0;
+}
+
+.scroll-bar:vertical .increment-arrow,
+.scroll-bar:vertical .decrement-arrow {
+    -fx-shape: "";
+    -fx-padding: 0;
+}

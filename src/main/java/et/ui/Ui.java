@@ -5,6 +5,7 @@ import et.task.TaskList;
 
 import java.util.List;
 import java.util.Scanner;
+import java.util.function.Consumer;
 
 /**
  * Handles ET's console input and output.
@@ -17,7 +18,30 @@ public class Ui {
     private static final String DIVIDER = "____________________________________________________________";
 
     /** Reads commands entered through the console without closing standard input. */
-    private final Scanner scanner = new Scanner(System.in);
+    private final Scanner scanner;
+
+    /** Receives each complete message produced by ET. */
+    private final Consumer<String> output;
+
+    /** Creates a UI that reads from and writes to the console. */
+    public Ui() {
+        this(new Scanner(System.in), System.out::println);
+    }
+
+    /**
+     * Creates an output-only UI for a graphical or test client.
+     *
+     * @param output the destination for each complete ET message
+     */
+    public Ui(Consumer<String> output) {
+        this(null, output);
+    }
+
+    /** Creates a UI with the supplied input and output channels. */
+    private Ui(Scanner scanner, Consumer<String> output) {
+        this.scanner = scanner;
+        this.output = output;
+    }
 
     /**
      * Returns whether another complete command can be read from the console.
@@ -25,6 +49,7 @@ public class Ui {
      * @return {@code true} when another command is available
      */
     public boolean hasNextCommand() {
+        assert scanner != null : "Console input must be available";
         return scanner.hasNextLine();
     }
 
@@ -34,6 +59,7 @@ public class Ui {
      * @return the next command without leading or trailing whitespace
      */
     public String readCommand() {
+        assert scanner != null : "Console input must be available";
         return scanner.nextLine().trim();
     }
 
@@ -44,30 +70,37 @@ public class Ui {
                 + "|  _|   | |\n"
                 + "| |___  | |\n"
                 + "|_____| |_|";
-        System.out.println(DIVIDER);
-        System.out.println(banner);
-        System.out.println("Hello, friend! I'm ET, a gentle visitor from far away.");
-        System.out.println("I may be a little lost, but I would be happy to help with your tasks.");
-        System.out.println("What can I do for you?");
-        System.out.println(DIVIDER);
+        output.accept(DIVIDER + "\n" + banner + "\n" + getWelcomeMessage() + "\n" + DIVIDER);
+    }
+
+    /**
+     * Returns the greeting shown at the start of a conversation.
+     *
+     * @return ET's greeting without console decoration
+     */
+    public String getWelcomeMessage() {
+        return "Hello, friend! I'm ET, a gentle visitor from far away.\n"
+                + "I may be a little lost, but I would be happy to help with your tasks.\n"
+                + "What can I do for you?";
     }
 
     /** Displays a divider between command interactions. */
     public void showDivider() {
-        System.out.println(DIVIDER);
+        output.accept(DIVIDER);
     }
 
     /** Displays ET's goodbye message. */
     public void showGoodbye() {
-        System.out.println("     Bye. Hope to see you again soon!");
+        output.accept("     Bye. Hope to see you again soon!");
     }
 
     /** Displays the tasks currently in the task list. */
     public void showTaskList(TaskList tasks) {
-        System.out.println("     Here are the tasks in your list:");
+        StringBuilder message = new StringBuilder("     Here are the tasks in your list:");
         for (int i = 0; i < tasks.size(); i++) {
-            System.out.println("     " + (i + 1) + "." + tasks.getTask(i));
+            message.append("\n     ").append(i + 1).append('.').append(tasks.getTask(i));
         }
+        output.accept(message.toString());
     }
 
     /**
@@ -76,41 +109,38 @@ public class Ui {
      * @param matchingTasks the tasks to display in matching order
      */
     public void showMatchingTasks(List<Task> matchingTasks) {
-        System.out.println("     Here are the matching tasks in your list:");
+        StringBuilder message = new StringBuilder("     Here are the matching tasks in your list:");
         for (int i = 0; i < matchingTasks.size(); i++) {
-            System.out.println("     " + (i + 1) + "." + matchingTasks.get(i));
+            message.append("\n     ").append(i + 1).append('.').append(matchingTasks.get(i));
         }
+        output.accept(message.toString());
     }
 
     /** Displays confirmation that a task was marked as completed. */
     public void showTaskMarked(Task task) {
-        System.out.println("     Nice! I've marked this task as done:");
-        System.out.println("       " + task);
+        output.accept("     Nice! I've marked this task as done:\n       " + task);
     }
 
     /** Displays confirmation that a task was marked as incomplete. */
     public void showTaskUnmarked(Task task) {
-        System.out.println("     OK, I've marked this task as not done yet:");
-        System.out.println("       " + task);
+        output.accept("     OK, I've marked this task as not done yet:\n       " + task);
     }
 
     /** Displays confirmation that a task was removed. */
     public void showTaskDeleted(Task task, int remainingTaskCount) {
-        System.out.println("     Noted. I've removed this task:");
-        System.out.println("       " + task);
-        System.out.println("     Now you have " + remainingTaskCount + " tasks in the list.");
+        output.accept("     Noted. I've removed this task:\n       " + task
+                + "\n     Now you have " + remainingTaskCount + " tasks in the list.");
     }
 
     /** Displays confirmation that a task was added. */
     public void showTaskAdded(Task task, int taskCount) {
-        System.out.println("     Got it. I've added this task:");
-        System.out.println("       " + task);
-        System.out.println("     Now you have " + taskCount + " tasks in the list.");
+        output.accept("     Got it. I've added this task:\n       " + task
+                + "\n     Now you have " + taskCount + " tasks in the list.");
     }
 
     /** Displays a user-facing error message. */
     public void showError(String message) {
-        System.out.println("     " + message);
+        output.accept("     " + message);
     }
 
     /** Explains that saved tasks could not be loaded. */

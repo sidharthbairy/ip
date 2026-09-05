@@ -13,19 +13,9 @@ Prerequisites: JDK 25, update Intellij to the most recent version.
    1. If there are any further prompts, accept the defaults.
 1. Configure the project to use **JDK 25** (not other versions) as explained in [here](https://www.jetbrains.com/help/idea/sdk.html#set-up-jdk).<br>
    In the same dialog, set the **Project language level** field to the `SDK default` option.
-1. After that, locate the `src/main/java/et/ET.java` file, right-click it, and choose `Run ET.main()` (if the code editor is showing compile errors, try restarting the IDE). If the setup is correct, you should see the following output:
-   ```
-   ____________________________________________________________
-    _____ _____
-   | ____|_   _|
-   |  _|   | |
-   | |___  | |
-   |_____| |_|
-   Hello, friend! I'm ET, a gentle visitor from far away.
-   I may be a little lost, but I would be happy to help with your tasks.
-   What can I do for you?
-   ____________________________________________________________
-   ```
+1. After that, locate `src/main/java/et/ET.java`, right-click it, and choose `Run ET.main()`.
+   ET should open in a JavaFX chat window. If the code editor shows compile errors, try reloading the Gradle project
+   or restarting the IDE.
 
 **Warning:** Keep the `src\main\java` folder as the root folder for Java files (i.e., don't rename those folders or move Java files to another folder outside of this folder path), as this is the default location some tools (e.g., Gradle) expect to find Java files.
 
@@ -43,5 +33,7 @@ The project uses the Shadow Gradle plugin to create an executable **fat JAR**: a
    ```bash
    java -jar build/libs/et.jar
    ```
+
+To start the application directly through Gradle, run `./gradlew run`.
 
 You can also use `./gradlew clean shadowJar` when you want Gradle to remove previous build output before creating a fresh JAR.

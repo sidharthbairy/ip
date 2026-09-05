@@ -38,10 +38,10 @@ public class Task {
     /**
      * Returns the icon used to display this task's completion status.
      *
-     * @return {@code X} when the task is done, or a space otherwise
+     * @return {@code ✓} when the task is done, or a space otherwise
      */
     public String getStatusIcon() {
-        return isDone ? "X" : " ";
+        return isDone ? "✓" : " ";
     }
 
     /**
