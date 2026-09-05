@@ -3,8 +3,8 @@
 ## Test configuration
 
 - Required Java version: `25`
-- Compile command: `javac -Xlint:all -d out $(find src/main/java -name '*.java')`
-- Run command: `java -cp out et.ET`
+- Compile command: `./gradlew classes`
+- Run command: `java -cp build/classes/java/main et.ConsoleLauncher`
 
 ## Test cases
 
@@ -143,7 +143,7 @@ ____________________________________________________________
 ____________________________________________________________
 ____________________________________________________________
      Nice! I've marked this task as done:
-       [T][X] read notes
+       [T][✓] read notes
 ____________________________________________________________
 ____________________________________________________________
      OK, I've marked this task as not done yet:
@@ -202,16 +202,16 @@ ____________________________________________________________
 ____________________________________________________________
 ____________________________________________________________
      Nice! I've marked this task as done:
-       [T][X] read book
+       [T][✓] read book
 ____________________________________________________________
 ____________________________________________________________
      Nice! I've marked this task as done:
-       [D][X] return Book (by: Jun 06 2019)
+       [D][✓] return Book (by: Jun 06 2019)
 ____________________________________________________________
 ____________________________________________________________
      Here are the matching tasks in your list:
-     1.[T][X] read book
-     2.[D][X] return Book (by: Jun 06 2019)
+     1.[T][✓] read book
+     2.[D][✓] return Book (by: Jun 06 2019)
 ____________________________________________________________
 ____________________________________________________________
      Bye. Hope to see you again soon!
