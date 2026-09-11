@@ -16,6 +16,7 @@ import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
+import java.util.regex.Pattern;
 
 /**
  * Saves ET's task list to, and loads it from, a file below the project root.
@@ -29,6 +30,12 @@ public class Storage {
 
     /** Separates the simple fields in a saved task line. */
     private static final String FIELD_SEPARATOR = " | ";
+
+    /** Represents an incomplete task in the storage format. */
+    private static final String INCOMPLETE_STATUS = "0";
+
+    /** Represents a completed task in the storage format. */
+    private static final String COMPLETE_STATUS = "1";
 
     /**
      * Loads every valid task in the storage file.
@@ -81,8 +88,8 @@ public class Storage {
      * @throws IllegalArgumentException if the line is not in ET's storage format
      */
     private Task parseTask(String line) {
-        String[] fields = line.split(" \\| ", -1);
-        if (fields.length < 3 || !fields[1].matches("[01]")) {
+        String[] fields = line.split(Pattern.quote(FIELD_SEPARATOR), -1);
+        if (fields.length < 3 || !isValidStatus(fields[1])) {
             throw new IllegalArgumentException("Invalid saved task");
         }
 
@@ -109,10 +116,20 @@ public class Storage {
             throw new IllegalArgumentException("Unknown saved task type");
         }
 
-        if (fields[1].equals("1")) {
+        if (fields[1].equals(COMPLETE_STATUS)) {
             task.markAsDone();
         }
         return task;
+    }
+
+    /**
+     * Returns whether a stored status is one of ET's recognized values.
+     *
+     * @param status the status field to check
+     * @return {@code true} if the status represents a complete or incomplete task
+     */
+    private boolean isValidStatus(String status) {
+        return status.equals(COMPLETE_STATUS) || status.equals(INCOMPLETE_STATUS);
     }
 
     /**
@@ -135,7 +152,7 @@ public class Storage {
      * @return the corresponding storage line
      */
     private String serializeTask(Task task) {
-        String status = task.isDone() ? "1" : "0";
+        String status = task.isDone() ? COMPLETE_STATUS : INCOMPLETE_STATUS;
         String taskTypeCode = task.getTaskType().getDisplayCode();
         switch (task.getTaskType()) {
         case TODO:
