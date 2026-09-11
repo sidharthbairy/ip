@@ -4,6 +4,7 @@ import et.parser.DateTimeParser;
 import et.task.Deadline;
 import et.task.Event;
 import et.task.Task;
+import et.task.TaskType;
 import et.task.Todo;
 
 import java.io.BufferedWriter;
@@ -15,6 +16,7 @@ import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
+import java.util.regex.Pattern;
 
 /**
  * Saves ET's task list to, and loads it from, a file below the project root.
@@ -28,6 +30,12 @@ public class Storage {
 
     /** Separates the simple fields in a saved task line. */
     private static final String FIELD_SEPARATOR = " | ";
+
+    /** Represents an incomplete task in the storage format. */
+    private static final String INCOMPLETE_STATUS = "0";
+
+    /** Represents a completed task in the storage format. */
+    private static final String COMPLETE_STATUS = "1";
 
     /**
      * Loads every valid task in the storage file.
@@ -80,23 +88,24 @@ public class Storage {
      * @throws IllegalArgumentException if the line is not in ET's storage format
      */
     private Task parseTask(String line) {
-        String[] fields = line.split(" \\| ", -1);
-        if (fields.length < 3 || !fields[1].matches("[01]")) {
+        String[] fields = line.split(Pattern.quote(FIELD_SEPARATOR), -1);
+        if (fields.length < 3 || !isValidStatus(fields[1])) {
             throw new IllegalArgumentException("Invalid saved task");
         }
 
         Task task;
-        switch (fields[0]) {
-        case "T":
+        TaskType taskType = TaskType.fromDisplayCode(fields[0]);
+        switch (taskType) {
+        case TODO:
             requireFieldCount(fields, 3);
             task = new Todo(decode(fields[2]));
             break;
-        case "D":
+        case DEADLINE:
             requireFieldCount(fields, 4);
             DateTimeParser.ParsedDateTime deadlineDate = DateTimeParser.parseStored(decode(fields[3]));
             task = new Deadline(decode(fields[2]), deadlineDate.value(), deadlineDate.hasTime());
             break;
-        case "E":
+        case EVENT:
             requireFieldCount(fields, 5);
             DateTimeParser.ParsedDateTime startDate = DateTimeParser.parseStored(decode(fields[3]));
             DateTimeParser.ParsedDateTime endDate = DateTimeParser.parseStored(decode(fields[4]));
@@ -107,10 +116,20 @@ public class Storage {
             throw new IllegalArgumentException("Unknown saved task type");
         }
 
-        if (fields[1].equals("1")) {
+        if (fields[1].equals(COMPLETE_STATUS)) {
             task.markAsDone();
         }
         return task;
+    }
+
+    /**
+     * Returns whether a stored status is one of ET's recognized values.
+     *
+     * @param status the status field to check
+     * @return {@code true} if the status represents a complete or incomplete task
+     */
+    private boolean isValidStatus(String status) {
+        return status.equals(COMPLETE_STATUS) || status.equals(INCOMPLETE_STATUS);
     }
 
     /**
@@ -133,19 +152,20 @@ public class Storage {
      * @return the corresponding storage line
      */
     private String serializeTask(Task task) {
-        String status = task.isDone() ? "1" : "0";
+        String status = task.isDone() ? COMPLETE_STATUS : INCOMPLETE_STATUS;
+        String taskTypeCode = task.getTaskType().getDisplayCode();
         switch (task.getTaskType()) {
         case TODO:
-            return String.join(FIELD_SEPARATOR, "T", status, encode(task.getDescription()));
+            return String.join(FIELD_SEPARATOR, taskTypeCode, status, encode(task.getDescription()));
         case DEADLINE:
             assert task instanceof Deadline : "Deadline task type must use the Deadline class";
             Deadline deadline = (Deadline) task;
-            return String.join(FIELD_SEPARATOR, "D", status, encode(deadline.getDescription()),
+            return String.join(FIELD_SEPARATOR, taskTypeCode, status, encode(deadline.getDescription()),
                     encode(DateTimeParser.formatForStorage(deadline.getBy(), deadline.hasTime())));
         case EVENT:
             assert task instanceof Event : "Event task type must use the Event class";
             Event event = (Event) task;
-            return String.join(FIELD_SEPARATOR, "E", status, encode(event.getDescription()),
+            return String.join(FIELD_SEPARATOR, taskTypeCode, status, encode(event.getDescription()),
                     encode(DateTimeParser.formatForStorage(event.getFrom(), event.hasStartTime())),
                     encode(DateTimeParser.formatForStorage(event.getTo(), event.hasEndTime())));
         default:

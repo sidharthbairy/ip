@@ -43,6 +43,36 @@ public class MainWindow extends Application {
     /** The number of decorative stars displayed behind the conversation. */
     private static final int STAR_COUNT = 26;
 
+    /** Advances each star horizontally through a deterministic position sequence. */
+    private static final int STAR_HORIZONTAL_STEP = 37;
+
+    /** Keeps horizontal star positions within the visible percentage range. */
+    private static final int STAR_HORIZONTAL_PERIOD = 97;
+
+    /** Keeps stars away from the left edge of the conversation area. */
+    private static final int STAR_HORIZONTAL_OFFSET = 2;
+
+    /** Advances each star vertically through a deterministic position sequence. */
+    private static final int STAR_VERTICAL_STEP = 61;
+
+    /** Keeps vertical star positions within the visible percentage range. */
+    private static final int STAR_VERTICAL_PERIOD = 89;
+
+    /** Keeps stars away from the top edge of the conversation area. */
+    private static final int STAR_VERTICAL_OFFSET = 4;
+
+    /** Converts a whole-number position into a proportional coordinate. */
+    private static final double STAR_POSITION_SCALE = 100.0;
+
+    /** Makes every fifth star larger and brighter than the others. */
+    private static final int BRIGHT_STAR_INTERVAL = 5;
+
+    /** The radius of a bright decorative star. */
+    private static final double BRIGHT_STAR_RADIUS = 1.5;
+
+    /** The radius of an ordinary decorative star. */
+    private static final double STAR_RADIUS = 0.8;
+
     /** The time the farewell remains visible before the window closes. */
     private static final int EXIT_DELAY_MILLIS = 650;
 
@@ -81,6 +111,20 @@ public class MainWindow extends Application {
      * @return the complete window layout
      */
     private BorderPane createLayout() {
+        BorderPane root = new BorderPane();
+        root.setTop(createHeader());
+        root.setCenter(createConversationArea());
+        root.setBottom(createComposer());
+        root.getStyleClass().add("app-shell");
+        return root;
+    }
+
+    /**
+     * Creates the scrollable conversation area and its decorative backdrop.
+     *
+     * @return the complete conversation area
+     */
+    private StackPane createConversationArea() {
         dialogContainer.setPadding(new Insets(24, 28, 28, 28));
         dialogContainer.setFillWidth(true);
         dialogContainer.getStyleClass().add("dialog-container");
@@ -92,6 +136,17 @@ public class MainWindow extends Application {
         scrollPane.getStyleClass().add("dialog-scroll");
         dialogContainer.heightProperty().addListener((observable, oldHeight, newHeight) -> scrollToLatestMessage());
 
+        StackPane conversationArea = new StackPane(createSpaceBackdrop(), scrollPane);
+        conversationArea.getStyleClass().add("conversation-area");
+        return conversationArea;
+    }
+
+    /**
+     * Creates the command field, send button, and input hint.
+     *
+     * @return the complete command composer
+     */
+    private VBox createComposer() {
         userInput.setPromptText("Send a task signal…  try “list”");
         userInput.setOnAction(event -> handleUserInput());
         userInput.getStyleClass().add("command-field");
@@ -111,16 +166,7 @@ public class MainWindow extends Application {
         VBox composer = new VBox(8, inputHint, inputBar);
         composer.setPadding(new Insets(14, 20, 18, 20));
         composer.getStyleClass().add("composer");
-
-        StackPane conversationArea = new StackPane(createSpaceBackdrop(), scrollPane);
-        conversationArea.getStyleClass().add("conversation-area");
-
-        BorderPane root = new BorderPane();
-        root.setTop(createHeader());
-        root.setCenter(conversationArea);
-        root.setBottom(composer);
-        root.getStyleClass().add("app-shell");
-        return root;
+        return composer;
     }
 
     /**
@@ -178,17 +224,32 @@ public class MainWindow extends Application {
         moonGlow.getStyleClass().add("moon-glow");
         backdrop.getChildren().add(moonGlow);
 
-        for (int i = 0; i < STAR_COUNT; i++) {
-            double horizontalRatio = ((i * 37) % 97 + 2) / 100.0;
-            double verticalRatio = ((i * 61) % 89 + 4) / 100.0;
-            Circle star = new Circle(i % 5 == 0 ? 1.5 : 0.8);
-            star.centerXProperty().bind(backdrop.widthProperty().multiply(horizontalRatio));
-            star.centerYProperty().bind(backdrop.heightProperty().multiply(verticalRatio));
-            star.getStyleClass().add(i % 5 == 0 ? "star-bright" : "star");
-            backdrop.getChildren().add(star);
+        for (int starIndex = 0; starIndex < STAR_COUNT; starIndex++) {
+            backdrop.getChildren().add(createStar(starIndex, backdrop));
         }
 
         return backdrop;
+    }
+
+    /**
+     * Creates one star at a stable proportional position in the backdrop.
+     *
+     * @param starIndex the zero-based position in the star sequence
+     * @param backdrop the pane whose dimensions determine the star position
+     * @return the configured decorative star
+     */
+    private Circle createStar(int starIndex, Pane backdrop) {
+        double horizontalRatio = ((starIndex * STAR_HORIZONTAL_STEP) % STAR_HORIZONTAL_PERIOD
+                + STAR_HORIZONTAL_OFFSET) / STAR_POSITION_SCALE;
+        double verticalRatio = ((starIndex * STAR_VERTICAL_STEP) % STAR_VERTICAL_PERIOD
+                + STAR_VERTICAL_OFFSET) / STAR_POSITION_SCALE;
+        boolean isBright = starIndex % BRIGHT_STAR_INTERVAL == 0;
+
+        Circle star = new Circle(isBright ? BRIGHT_STAR_RADIUS : STAR_RADIUS);
+        star.centerXProperty().bind(backdrop.widthProperty().multiply(horizontalRatio));
+        star.centerYProperty().bind(backdrop.heightProperty().multiply(verticalRatio));
+        star.getStyleClass().add(isBright ? "star-bright" : "star");
+        return star;
     }
 
     /** Sends a non-blank user command to ET and displays both sides of the exchange. */

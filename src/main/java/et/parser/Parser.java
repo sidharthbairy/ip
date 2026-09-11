@@ -71,53 +71,78 @@ public class Parser {
                 || commandType == CommandType.EVENT
                 : "Only task-creation commands can be parsed as tasks";
 
-        if (commandType == CommandType.TODO) {
-            String description = command.substring(commandType.getKeyword().length()).trim();
-            requireText(description, "Please provide a description for the ToDo.");
-            return new Todo(description);
+        String taskDetails = command.substring(commandType.getKeyword().length()).trim();
+        return switch (commandType) {
+        case TODO -> parseTodo(taskDetails);
+        case DEADLINE -> parseDeadline(taskDetails);
+        case EVENT -> parseEvent(taskDetails);
+        default -> throw new IllegalArgumentException("Unsupported task command");
+        };
+    }
+
+    /**
+     * Converts to-do details into a task.
+     *
+     * @param taskDetails the text following the to-do command keyword
+     * @return the to-do represented by the details
+     * @throws ETException if the description is missing
+     */
+    private Todo parseTodo(String taskDetails) throws ETException {
+        requireText(taskDetails, "Please provide a description for the ToDo.");
+        return new Todo(taskDetails);
+    }
+
+    /**
+     * Converts deadline details into a task.
+     *
+     * @param taskDetails the text following the deadline command keyword
+     * @return the deadline represented by the details
+     * @throws ETException if the description or deadline date is missing or invalid
+     */
+    private Deadline parseDeadline(String taskDetails) throws ETException {
+        int byMarker = taskDetails.indexOf("/by");
+        if (byMarker < 0) {
+            throw new ETException("Please include /by followed by the deadline date or time.");
         }
 
-        if (commandType == CommandType.DEADLINE) {
-            String remainder = command.substring(commandType.getKeyword().length()).trim();
-            int byMarker = remainder.indexOf("/by");
-            if (byMarker < 0) {
-                throw new ETException("Please include /by followed by the deadline date or time.");
-            }
+        String description = taskDetails.substring(0, byMarker).trim();
+        String by = taskDetails.substring(byMarker + "/by".length()).trim();
+        requireText(description, "Please provide a description for the deadline.");
+        requireText(by, "Please provide a date or time after /by.");
+        DateTimeParser.ParsedDateTime deadlineDate = DateTimeParser.parse(by);
+        return new Deadline(description, deadlineDate.value(), deadlineDate.hasTime());
+    }
 
-            String description = remainder.substring(0, byMarker).trim();
-            String by = remainder.substring(byMarker + "/by".length()).trim();
-            requireText(description, "Please provide a description for the deadline.");
-            requireText(by, "Please provide a date or time after /by.");
-            DateTimeParser.ParsedDateTime deadlineDate = DateTimeParser.parse(by);
-            return new Deadline(description, deadlineDate.value(), deadlineDate.hasTime());
+    /**
+     * Converts event details into a task.
+     *
+     * @param taskDetails the text following the event command keyword
+     * @return the event represented by the details
+     * @throws ETException if required event details are missing, invalid, or reversed
+     */
+    private Event parseEvent(String taskDetails) throws ETException {
+        int fromMarker = taskDetails.indexOf("/from");
+        int toMarker = fromMarker < 0
+                ? -1
+                : taskDetails.indexOf("/to", fromMarker + "/from".length());
+        if (fromMarker < 0 || toMarker < 0) {
+            throw new ETException("Please include both /from and /to for the event time.");
         }
 
-        if (commandType == CommandType.EVENT) {
-            String remainder = command.substring(commandType.getKeyword().length()).trim();
-            int fromMarker = remainder.indexOf("/from");
-            int toMarker = fromMarker < 0
-                    ? -1
-                    : remainder.indexOf("/to", fromMarker + "/from".length());
-            if (fromMarker < 0 || toMarker < 0) {
-                throw new ETException("Please include both /from and /to for the event time.");
-            }
+        String description = taskDetails.substring(0, fromMarker).trim();
+        String from = taskDetails.substring(fromMarker + "/from".length(), toMarker).trim();
+        String to = taskDetails.substring(toMarker + "/to".length()).trim();
+        requireText(description, "Please provide a description for the event.");
+        requireText(from, "Please provide a starting date or time after /from.");
+        requireText(to, "Please provide an ending date or time after /to.");
 
-            String description = remainder.substring(0, fromMarker).trim();
-            String from = remainder.substring(fromMarker + "/from".length(), toMarker).trim();
-            String to = remainder.substring(toMarker + "/to".length()).trim();
-            requireText(description, "Please provide a description for the event.");
-            requireText(from, "Please provide a starting date or time after /from.");
-            requireText(to, "Please provide an ending date or time after /to.");
-            DateTimeParser.ParsedDateTime startDate = DateTimeParser.parse(from);
-            DateTimeParser.ParsedDateTime endDate = DateTimeParser.parse(to);
-            if (endDate.value().isBefore(startDate.value())) {
-                throw new ETException("The event end date and time cannot be before its start.");
-            }
-            return new Event(description, startDate.value(), startDate.hasTime(),
-                    endDate.value(), endDate.hasTime());
+        DateTimeParser.ParsedDateTime startDate = DateTimeParser.parse(from);
+        DateTimeParser.ParsedDateTime endDate = DateTimeParser.parse(to);
+        if (endDate.value().isBefore(startDate.value())) {
+            throw new ETException("The event end date and time cannot be before its start.");
         }
-
-        throw new IllegalArgumentException("Unsupported task command");
+        return new Event(description, startDate.value(), startDate.hasTime(),
+                endDate.value(), endDate.hasTime());
     }
 
     /**

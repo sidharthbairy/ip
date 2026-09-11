@@ -96,11 +96,7 @@ public class Ui {
 
     /** Displays the tasks currently in the task list. */
     public void showTaskList(TaskList tasks) {
-        StringBuilder message = new StringBuilder("     Here are the tasks in your list:");
-        for (int i = 0; i < tasks.size(); i++) {
-            message.append("\n     ").append(i + 1).append('.').append(tasks.getTask(i));
-        }
-        output.accept(message.toString());
+        showTasks("     Here are the tasks in your list:", tasks.getTasks());
     }
 
     /**
@@ -109,9 +105,19 @@ public class Ui {
      * @param matchingTasks the tasks to display in matching order
      */
     public void showMatchingTasks(List<Task> matchingTasks) {
-        StringBuilder message = new StringBuilder("     Here are the matching tasks in your list:");
-        for (int i = 0; i < matchingTasks.size(); i++) {
-            message.append("\n     ").append(i + 1).append('.').append(matchingTasks.get(i));
+        showTasks("     Here are the matching tasks in your list:", matchingTasks);
+    }
+
+    /**
+     * Displays a heading followed by a numbered sequence of tasks.
+     *
+     * @param heading the message shown before the tasks
+     * @param tasks the tasks to display in order
+     */
+    private void showTasks(String heading, List<Task> tasks) {
+        StringBuilder message = new StringBuilder(heading);
+        for (int i = 0; i < tasks.size(); i++) {
+            message.append("\n     ").append(i + 1).append('.').append(tasks.get(i));
         }
         output.accept(message.toString());
     }

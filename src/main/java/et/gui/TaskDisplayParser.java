@@ -31,25 +31,9 @@ final class TaskDisplayParser {
         }
 
         String taskNumber = matcher.group(1) == null ? "" : matcher.group(1);
-        TaskType taskType = parseTaskType(matcher.group(2));
+        TaskType taskType = TaskType.fromDisplayCode(matcher.group(2));
         boolean isDone = !matcher.group(3).isBlank();
         return Optional.of(new TaskDisplay(taskNumber, taskType, isDone, matcher.group(4)));
-    }
-
-    /**
-     * Converts a task's persisted display code into its task type.
-     *
-     * @param displayCode the single-letter task display code
-     * @return the corresponding task type
-     */
-    private static TaskType parseTaskType(String displayCode) {
-        assert displayCode.matches("[TDE]") : "Task display code must be recognized";
-        return switch (displayCode) {
-        case "T" -> TaskType.TODO;
-        case "D" -> TaskType.DEADLINE;
-        case "E" -> TaskType.EVENT;
-        default -> throw new IllegalArgumentException("Unknown task display code");
-        };
     }
 
     /**
