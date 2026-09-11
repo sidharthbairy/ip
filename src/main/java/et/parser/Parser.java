@@ -66,6 +66,11 @@ public class Parser {
      * @throws ETException if the command is unknown or missing required information
      */
     private Task parseTask(String command, CommandType commandType) throws ETException {
+        assert commandType == CommandType.TODO
+                || commandType == CommandType.DEADLINE
+                || commandType == CommandType.EVENT
+                : "Only task-creation commands can be parsed as tasks";
+
         if (commandType == CommandType.TODO) {
             String description = command.substring(commandType.getKeyword().length()).trim();
             requireText(description, "Please provide a description for the ToDo.");

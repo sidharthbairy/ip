@@ -43,6 +43,7 @@ final class TaskDisplayParser {
      * @return the corresponding task type
      */
     private static TaskType parseTaskType(String displayCode) {
+        assert displayCode.matches("[TDE]") : "Task display code must be recognized";
         return switch (displayCode) {
         case "T" -> TaskType.TODO;
         case "D" -> TaskType.DEADLINE;

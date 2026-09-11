@@ -97,6 +97,7 @@ public final class DateTimeParser {
      * @return a human-readable date or date and time
      */
     public static String format(LocalDateTime dateTime, boolean hasTime) {
+        assert dateTime != null : "Date value to format must be provided";
         return hasTime ? dateTime.format(OUTPUT_DATE_TIME_FORMAT) : dateTime.format(OUTPUT_DATE_FORMAT);
     }
 
@@ -108,6 +109,7 @@ public final class DateTimeParser {
      * @return the ISO date or ISO date-time value
      */
     public static String formatForStorage(LocalDateTime dateTime, boolean hasTime) {
+        assert dateTime != null : "Date value to store must be provided";
         return hasTime ? dateTime.toString() : dateTime.toLocalDate().toString();
     }
 
