@@ -55,6 +55,17 @@ ET displays it as:
 Use `list` to display every task. Use `mark <number>` to complete a task and
 `unmark <number>` to mark it as not done again.
 
+## Sorting tasks
+
+Use `sort` to display a temporary chronological view of your tasks. Incomplete
+tasks appear before completed tasks. Within each group, deadlines are ordered
+by their due date, events by their start date, and ToDos appear after tasks
+with dates.
+
+The numbers shown are the tasks' original numbers, so you can use them with
+`mark`, `unmark`, or `delete`. Sorting does not change the order shown by
+`list` or `find`, and it does not change the saved task order.
+
 ## Finding tasks
 
 Use `find <keyword>` to display tasks whose descriptions contain the keyword.

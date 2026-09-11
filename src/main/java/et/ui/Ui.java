@@ -100,6 +100,19 @@ public class Ui {
     }
 
     /**
+     * Displays a chronological view of the task list using each task's canonical number.
+     *
+     * @param tasks the task list to display without rearranging
+     */
+    public void showSortedTaskList(TaskList tasks) {
+        StringBuilder message = new StringBuilder("     Here are your tasks sorted chronologically:");
+        for (int taskNumber : tasks.getChronologicallySortedTaskNumbers()) {
+            message.append("\n     ").append(taskNumber).append('.').append(tasks.getTask(taskNumber - 1));
+        }
+        output.accept(message.toString());
+    }
+
+    /**
      * Displays the tasks whose descriptions matched a search keyword.
      *
      * @param matchingTasks the tasks to display in matching order

@@ -8,6 +8,7 @@ public enum CommandType {
     DEADLINE("deadline"),
     EVENT("event"),
     LIST("list"),
+    SORT("sort"),
     FIND("find"),
     MARK("mark"),
     UNMARK("unmark"),

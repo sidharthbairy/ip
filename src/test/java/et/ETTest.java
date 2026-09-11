@@ -2,10 +2,12 @@ package et;
 
 import et.parser.Parser;
 import et.storage.Storage;
+import et.task.Deadline;
 import et.task.Task;
 import et.ui.Ui;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,8 +41,32 @@ class ETTest {
 
         String response = et.getResponse("remind me");
 
-        assertEquals("I don't recognize that command. Try todo, deadline, event, list, find, mark, unmark, "
-                + "delete, or bye.", response);
+        assertEquals("I don't recognize that command. Try todo, deadline, event, list, sort, find, mark, "
+                + "unmark, delete, or bye.", response);
+    }
+
+    @Test
+    void getResponse_sort_returnsCanonicalNumbersWithoutSavingOrReordering() {
+        Deadline laterDeadline = new Deadline("later", LocalDateTime.of(2027, 1, 10, 0, 0), false);
+        Deadline earlierDeadline = new Deadline("earlier", LocalDateTime.of(2027, 1, 3, 0, 0), false);
+        RecordingStorage storage = new RecordingStorage(List.of(laterDeadline, earlierDeadline));
+        ET et = new ET(new Ui(message -> { }), storage, new Parser());
+
+        String sortResponse = et.getResponse("sort");
+        String listResponse = et.getResponse("list");
+
+        assertEquals("Here are your tasks sorted chronologically:\n"
+                + "     2.[D][ ] earlier (by: Jan 03 2027)\n"
+                + "     1.[D][ ] later (by: Jan 10 2027)", sortResponse);
+        assertEquals("Here are the tasks in your list:\n"
+                + "     1.[D][ ] later (by: Jan 10 2027)\n"
+                + "     2.[D][ ] earlier (by: Jan 03 2027)", listResponse);
+        assertEquals(0, storage.saveCallCount);
+
+        et.getResponse("mark 2");
+
+        assertTrue(earlierDeadline.isDone());
+        assertEquals(1, storage.saveCallCount);
     }
 
     @Test
@@ -55,16 +81,33 @@ class ETTest {
 
     /** Stores tasks in memory so tests do not modify the application's data file. */
     private static class RecordingStorage extends Storage {
+        private final List<Task> tasksToLoad;
         private List<Task> savedTasks = List.of();
+        private int saveCallCount;
+
+        /** Creates storage that loads an empty task list. */
+        RecordingStorage() {
+            this(List.of());
+        }
+
+        /**
+         * Creates storage that loads the supplied tasks.
+         *
+         * @param tasksToLoad the initial tasks to return when ET starts
+         */
+        RecordingStorage(List<Task> tasksToLoad) {
+            this.tasksToLoad = List.copyOf(tasksToLoad);
+        }
 
         @Override
         public List<Task> load() {
-            return new ArrayList<>();
+            return new ArrayList<>(tasksToLoad);
         }
 
         @Override
         public void save(List<Task> tasks) throws IOException {
             savedTasks = List.copyOf(tasks);
+            saveCallCount++;
         }
     }
 }

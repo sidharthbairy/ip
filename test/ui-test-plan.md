@@ -299,3 +299,71 @@ ____________________________________________________________
      Bye. Hope to see you again soon!
 ____________________________________________________________
 ```
+
+### Sort tasks without changing their original numbers
+
+Aim: Verify that sort groups incomplete tasks before completed tasks, orders dated tasks chronologically, preserves canonical task numbers, and does not reorder the task list.
+
+Inputs:
+```text
+deadline later /by 10/1/2027
+deadline earlier /by 3/1/2027
+todo undated
+mark 1
+sort
+mark 2
+list
+bye
+```
+
+Expected output:
+```text
+____________________________________________________________
+ _____ _____
+| ____|_   _|
+|  _|   | |
+| |___  | |
+|_____| |_|
+Hello, friend! I'm ET, a gentle visitor from far away.
+I may be a little lost, but I would be happy to help with your tasks.
+What can I do for you?
+____________________________________________________________
+____________________________________________________________
+     Got it. I've added this task:
+       [D][ ] later (by: Jan 10 2027)
+     Now you have 1 tasks in the list.
+____________________________________________________________
+____________________________________________________________
+     Got it. I've added this task:
+       [D][ ] earlier (by: Jan 03 2027)
+     Now you have 2 tasks in the list.
+____________________________________________________________
+____________________________________________________________
+     Got it. I've added this task:
+       [T][ ] undated
+     Now you have 3 tasks in the list.
+____________________________________________________________
+____________________________________________________________
+     Nice! I've marked this task as done:
+       [D][✓] later (by: Jan 10 2027)
+____________________________________________________________
+____________________________________________________________
+     Here are your tasks sorted chronologically:
+     2.[D][ ] earlier (by: Jan 03 2027)
+     3.[T][ ] undated
+     1.[D][✓] later (by: Jan 10 2027)
+____________________________________________________________
+____________________________________________________________
+     Nice! I've marked this task as done:
+       [D][✓] earlier (by: Jan 03 2027)
+____________________________________________________________
+____________________________________________________________
+     Here are the tasks in your list:
+     1.[D][✓] later (by: Jan 10 2027)
+     2.[D][✓] earlier (by: Jan 03 2027)
+     3.[T][ ] undated
+____________________________________________________________
+____________________________________________________________
+     Bye. Hope to see you again soon!
+____________________________________________________________
+```
