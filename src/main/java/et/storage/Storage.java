@@ -4,6 +4,7 @@ import et.parser.DateTimeParser;
 import et.task.Deadline;
 import et.task.Event;
 import et.task.Task;
+import et.task.TaskType;
 import et.task.Todo;
 
 import java.io.BufferedWriter;
@@ -86,17 +87,18 @@ public class Storage {
         }
 
         Task task;
-        switch (fields[0]) {
-        case "T":
+        TaskType taskType = TaskType.fromDisplayCode(fields[0]);
+        switch (taskType) {
+        case TODO:
             requireFieldCount(fields, 3);
             task = new Todo(decode(fields[2]));
             break;
-        case "D":
+        case DEADLINE:
             requireFieldCount(fields, 4);
             DateTimeParser.ParsedDateTime deadlineDate = DateTimeParser.parseStored(decode(fields[3]));
             task = new Deadline(decode(fields[2]), deadlineDate.value(), deadlineDate.hasTime());
             break;
-        case "E":
+        case EVENT:
             requireFieldCount(fields, 5);
             DateTimeParser.ParsedDateTime startDate = DateTimeParser.parseStored(decode(fields[3]));
             DateTimeParser.ParsedDateTime endDate = DateTimeParser.parseStored(decode(fields[4]));
@@ -134,18 +136,19 @@ public class Storage {
      */
     private String serializeTask(Task task) {
         String status = task.isDone() ? "1" : "0";
+        String taskTypeCode = task.getTaskType().getDisplayCode();
         switch (task.getTaskType()) {
         case TODO:
-            return String.join(FIELD_SEPARATOR, "T", status, encode(task.getDescription()));
+            return String.join(FIELD_SEPARATOR, taskTypeCode, status, encode(task.getDescription()));
         case DEADLINE:
             assert task instanceof Deadline : "Deadline task type must use the Deadline class";
             Deadline deadline = (Deadline) task;
-            return String.join(FIELD_SEPARATOR, "D", status, encode(deadline.getDescription()),
+            return String.join(FIELD_SEPARATOR, taskTypeCode, status, encode(deadline.getDescription()),
                     encode(DateTimeParser.formatForStorage(deadline.getBy(), deadline.hasTime())));
         case EVENT:
             assert task instanceof Event : "Event task type must use the Event class";
             Event event = (Event) task;
-            return String.join(FIELD_SEPARATOR, "E", status, encode(event.getDescription()),
+            return String.join(FIELD_SEPARATOR, taskTypeCode, status, encode(event.getDescription()),
                     encode(DateTimeParser.formatForStorage(event.getFrom(), event.hasStartTime())),
                     encode(DateTimeParser.formatForStorage(event.getTo(), event.hasEndTime())));
         default:
