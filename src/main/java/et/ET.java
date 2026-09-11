@@ -35,6 +35,10 @@ public class ET {
 
     /** Creates ET with replaceable collaborators for automated tests. */
     ET(Ui ui, Storage storage, Parser parser) {
+        assert ui != null : "UI must be provided";
+        assert storage != null : "Storage must be provided";
+        assert parser != null : "Parser must be provided";
+
         this.ui = ui;
         this.storage = storage;
         this.parser = parser;

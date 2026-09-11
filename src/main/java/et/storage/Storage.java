@@ -138,10 +138,12 @@ public class Storage {
         case TODO:
             return String.join(FIELD_SEPARATOR, "T", status, encode(task.getDescription()));
         case DEADLINE:
+            assert task instanceof Deadline : "Deadline task type must use the Deadline class";
             Deadline deadline = (Deadline) task;
             return String.join(FIELD_SEPARATOR, "D", status, encode(deadline.getDescription()),
                     encode(DateTimeParser.formatForStorage(deadline.getBy(), deadline.hasTime())));
         case EVENT:
+            assert task instanceof Event : "Event task type must use the Event class";
             Event event = (Event) task;
             return String.join(FIELD_SEPARATOR, "E", status, encode(event.getDescription()),
                     encode(DateTimeParser.formatForStorage(event.getFrom(), event.hasStartTime())),
