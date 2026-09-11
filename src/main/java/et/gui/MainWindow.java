@@ -81,6 +81,20 @@ public class MainWindow extends Application {
      * @return the complete window layout
      */
     private BorderPane createLayout() {
+        BorderPane root = new BorderPane();
+        root.setTop(createHeader());
+        root.setCenter(createConversationArea());
+        root.setBottom(createComposer());
+        root.getStyleClass().add("app-shell");
+        return root;
+    }
+
+    /**
+     * Creates the scrollable conversation area and its decorative backdrop.
+     *
+     * @return the complete conversation area
+     */
+    private StackPane createConversationArea() {
         dialogContainer.setPadding(new Insets(24, 28, 28, 28));
         dialogContainer.setFillWidth(true);
         dialogContainer.getStyleClass().add("dialog-container");
@@ -92,6 +106,17 @@ public class MainWindow extends Application {
         scrollPane.getStyleClass().add("dialog-scroll");
         dialogContainer.heightProperty().addListener((observable, oldHeight, newHeight) -> scrollToLatestMessage());
 
+        StackPane conversationArea = new StackPane(createSpaceBackdrop(), scrollPane);
+        conversationArea.getStyleClass().add("conversation-area");
+        return conversationArea;
+    }
+
+    /**
+     * Creates the command field, send button, and input hint.
+     *
+     * @return the complete command composer
+     */
+    private VBox createComposer() {
         userInput.setPromptText("Send a task signal…  try “list”");
         userInput.setOnAction(event -> handleUserInput());
         userInput.getStyleClass().add("command-field");
@@ -111,16 +136,7 @@ public class MainWindow extends Application {
         VBox composer = new VBox(8, inputHint, inputBar);
         composer.setPadding(new Insets(14, 20, 18, 20));
         composer.getStyleClass().add("composer");
-
-        StackPane conversationArea = new StackPane(createSpaceBackdrop(), scrollPane);
-        conversationArea.getStyleClass().add("conversation-area");
-
-        BorderPane root = new BorderPane();
-        root.setTop(createHeader());
-        root.setCenter(conversationArea);
-        root.setBottom(composer);
-        root.getStyleClass().add("app-shell");
-        return root;
+        return composer;
     }
 
     /**
