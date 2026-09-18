@@ -125,7 +125,7 @@ public class ET {
         String welcomeMessage = ui.getWelcomeMessage();
         if (hasLoadingError) {
             return welcomeMessage + System.lineSeparator()
-                    + "I couldn't load your saved tasks, so I'm starting with an empty list.";
+                    + "Oh... my memory box would not open, so I'm starting with an empty list.";
         }
         return welcomeMessage;
     }

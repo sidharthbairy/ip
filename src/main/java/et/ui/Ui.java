@@ -79,9 +79,9 @@ public class Ui {
      * @return ET's greeting without console decoration
      */
     public String getWelcomeMessage() {
-        return "Hello, friend! I'm ET, a gentle visitor from far away.\n"
-                + "I may be a little lost, but I would be happy to help with your tasks.\n"
-                + "What can I do for you?";
+        return "Oh! Hello, Earth friend. I'm ET, your slightly homesick task helper.\n"
+                + "I collect tasks, deadlines, and curious little plans while I wait for my ride home.\n"
+                + "What shall we remember together?";
     }
 
     /** Displays a divider between command interactions. */
@@ -91,12 +91,12 @@ public class Ui {
 
     /** Displays ET's goodbye message. */
     public void showGoodbye() {
-        output.accept("     Bye. Hope to see you again soon!");
+        output.accept("     Bye for now, Earth friend. Keep looking up!");
     }
 
     /** Displays the tasks currently in the task list. */
     public void showTaskList(TaskList tasks) {
-        showTasks("     Here are the tasks in your list:", tasks.getTasks());
+        showTasks("     I found these in our little Earth mission:", tasks.getTasks());
     }
 
     /**
@@ -105,7 +105,7 @@ public class Ui {
      * @param tasks the task list to display without rearranging
      */
     public void showSortedTaskList(TaskList tasks) {
-        StringBuilder message = new StringBuilder("     Here are your tasks sorted chronologically:");
+        StringBuilder message = new StringBuilder("     I lined up your tasks by Earth time:");
         for (int taskNumber : tasks.getChronologicallySortedTaskNumbers()) {
             message.append("\n     ").append(taskNumber).append('.').append(tasks.getTask(taskNumber - 1));
         }
@@ -118,7 +118,7 @@ public class Ui {
      * @param matchingTasks the tasks to display in matching order
      */
     public void showMatchingTasks(List<Task> matchingTasks) {
-        showTasks("     Here are the matching tasks in your list:", matchingTasks);
+        showTasks("     My scanner found these matching tasks:", matchingTasks);
     }
 
     /**
@@ -137,24 +137,35 @@ public class Ui {
 
     /** Displays confirmation that a task was marked as completed. */
     public void showTaskMarked(Task task) {
-        output.accept("     Nice! I've marked this task as done:\n       " + task);
+        output.accept("     Beep! This task is complete:\n       " + task);
     }
 
     /** Displays confirmation that a task was marked as incomplete. */
     public void showTaskUnmarked(Task task) {
-        output.accept("     OK, I've marked this task as not done yet:\n       " + task);
+        output.accept("     Oh! This task needs another turn:\n       " + task);
     }
 
     /** Displays confirmation that a task was removed. */
     public void showTaskDeleted(Task task, int remainingTaskCount) {
-        output.accept("     Noted. I've removed this task:\n       " + task
-                + "\n     Now you have " + remainingTaskCount + " tasks in the list.");
+        output.accept("     Poof! I let this task drift away:\n       " + task
+                + "\n" + formatTaskCount(remainingTaskCount));
     }
 
     /** Displays confirmation that a task was added. */
     public void showTaskAdded(Task task, int taskCount) {
-        output.accept("     Got it. I've added this task:\n       " + task
-                + "\n     Now you have " + taskCount + " tasks in the list.");
+        output.accept("     Ooh, a new Earth task! I've tucked it safely into the list:\n       " + task
+                + "\n" + formatTaskCount(taskCount));
+    }
+
+    /**
+     * Returns ET's summary of the number of tasks currently stored.
+     *
+     * @param taskCount the number of tasks in the list
+     * @return a grammatically correct task-count message
+     */
+    private String formatTaskCount(int taskCount) {
+        String taskLabel = taskCount == 1 ? "task" : "tasks";
+        return "     My list now holds " + taskCount + " " + taskLabel + ".";
     }
 
     /** Displays a user-facing error message. */
@@ -164,11 +175,11 @@ public class Ui {
 
     /** Explains that saved tasks could not be loaded. */
     public void showLoadingError() {
-        showError("I couldn't load your saved tasks, so I'm starting with an empty list.");
+        showError("Oh... my memory box would not open, so I'm starting with an empty list.");
     }
 
     /** Explains that a changed task list could not be saved. */
     public void showSavingError() {
-        showError("Your task was changed, but I couldn't save it to disk.");
+        showError("Oh... I changed your task, but my memory box would not save it.");
     }
 }

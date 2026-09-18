@@ -102,7 +102,7 @@ public class MainWindow extends Application {
         Scene scene = new Scene(root, WINDOW_WIDTH, WINDOW_HEIGHT);
         scene.getStylesheets().add(getClass().getResource("/css/main.css").toExternalForm());
 
-        stage.setTitle("ET • Task Companion");
+        stage.setTitle("ET • Your Curious Task Friend");
         stage.setMinWidth(540);
         stage.setMinHeight(600);
         stage.setScene(scene);
@@ -154,12 +154,12 @@ public class MainWindow extends Application {
      * @return the complete command composer
      */
     private VBox createComposer() {
-        userInput.setPromptText("Send a task signal…  try “list”");
+        userInput.setPromptText("Tell ET what to remember…  try “list”");
         userInput.setOnAction(event -> handleUserInput());
         userInput.getStyleClass().add("command-field");
         HBox.setHgrow(userInput, Priority.ALWAYS);
 
-        Button sendButton = new Button("TRANSMIT");
+        Button sendButton = new Button("BEAM IT");
         sendButton.setDefaultButton(true);
         sendButton.setOnAction(event -> handleUserInput());
         sendButton.getStyleClass().add("send-button");
@@ -179,7 +179,7 @@ public class MainWindow extends Application {
      * @return the row of quick-command controls
      */
     private HBox createQuickCommands() {
-        Label inputHint = new Label("QUICK SIGNALS");
+        Label inputHint = new Label("EARTH SHORTCUTS");
         inputHint.getStyleClass().add("input-hint");
 
         Button listButton = createQuickCommandButton("LIST", "Show all tasks");
@@ -247,7 +247,7 @@ public class MainWindow extends Application {
         Label brandMark = new Label("ET");
         brandMark.getStyleClass().add("brand-mark");
 
-        Label kicker = new Label("INTERSTELLAR TASK COMPANION");
+        Label kicker = new Label("CURIOUS VISITOR • TASK COLLECTOR");
         kicker.getStyleClass().add("app-kicker");
 
         Label title = new Label("ET");
@@ -255,9 +255,9 @@ public class MainWindow extends Application {
 
         VBox identity = new VBox(1, kicker, title);
 
-        Label statusDot = new Label("");
+        Label statusDot = new Label("♥");
         statusDot.getStyleClass().add("status-dot");
-        Label statusText = new Label("SIGNAL ONLINE");
+        Label statusText = new Label("HOME SIGNAL GLOWING");
         statusText.getStyleClass().add("status-text");
         HBox status = new HBox(7, statusDot, statusText);
         status.setAlignment(Pos.CENTER);
@@ -268,7 +268,7 @@ public class MainWindow extends Application {
         HBox titleRow = new HBox(12, brandMark, identity, spacer, status);
         titleRow.setAlignment(Pos.CENTER_LEFT);
 
-        Label tagline = new Label("A little help from somewhere among the stars.");
+        Label tagline = new Label("Organizing Earth, one tiny mission at a time.");
         tagline.getStyleClass().add("tagline");
 
         VBox header = new VBox(9, titleRow, tagline);
@@ -377,7 +377,7 @@ public class MainWindow extends Application {
 
         Region bubble = isUser ? createUserBubble(message) : createEtBubble(message);
 
-        Label author = new Label(isUser ? "YOU  //  EARTH" : "ET  //  ORBIT");
+        Label author = new Label(isUser ? "YOU  //  EARTH FRIEND" : "ET  //  VISITOR");
         author.getStyleClass().addAll("message-author",
                 isUser ? "user-message-author" : "et-message-author");
 

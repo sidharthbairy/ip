@@ -59,8 +59,8 @@ public class Parser {
         default:
             break;
         }
-        throw new ETException("I don't recognize that command. Try todo, deadline, event, list, sort, find, "
-                + "mark, unmark, delete, or bye.");
+        throw new ETException("Hmm... my Earth decoder doesn't know that command. Try todo, deadline, event, "
+                + "list, sort, find, mark, unmark, delete, or bye.");
     }
 
     /**
@@ -108,7 +108,7 @@ public class Parser {
     private Deadline parseDeadline(String taskDetails) throws ETException {
         int byMarker = taskDetails.indexOf("/by");
         if (byMarker < 0) {
-            throw new ETException("Please include /by followed by the deadline date or time.");
+            throw new ETException("My Earth calendar needs /by followed by the deadline date or time.");
         }
 
         String description = taskDetails.substring(0, byMarker).trim();
@@ -132,7 +132,7 @@ public class Parser {
                 ? -1
                 : taskDetails.indexOf("/to", fromMarker + "/from".length());
         if (fromMarker < 0 || toMarker < 0) {
-            throw new ETException("Please include both /from and /to for the event time.");
+            throw new ETException("My Earth calendar needs both /from and /to for the event time.");
         }
 
         String description = taskDetails.substring(0, fromMarker).trim();
@@ -145,7 +145,7 @@ public class Parser {
         DateTimeParser.ParsedDateTime startDate = DateTimeParser.parse(from);
         DateTimeParser.ParsedDateTime endDate = DateTimeParser.parse(to);
         if (endDate.value().isBefore(startDate.value())) {
-            throw new ETException("The event end date and time cannot be before its start.");
+            throw new ETException("Oops! An event cannot end before it starts.");
         }
         return new Event(description, startDate.value(), startDate.hasTime(),
                 endDate.value(), endDate.hasTime());
@@ -164,7 +164,7 @@ public class Parser {
         try {
             return Integer.parseInt(taskNumber) - 1;
         } catch (NumberFormatException e) {
-            throw new ETException("Please give a valid task number after " + commandType.getKeyword() + ".");
+            throw new ETException("My scanner needs a valid task number after " + commandType.getKeyword() + ".");
         }
     }
 

@@ -59,6 +59,6 @@ class TaskDisplayParserTest {
 
     @Test
     void parseTaskLine_regularResponseText_returnsEmptyValue() {
-        assertTrue(TaskDisplayParser.parseTaskLine("Here are the tasks in your list:").isEmpty());
+        assertTrue(TaskDisplayParser.parseTaskLine("I found these in our little Earth mission:").isEmpty());
     }
 }
