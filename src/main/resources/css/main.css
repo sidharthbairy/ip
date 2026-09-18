@@ -271,6 +271,73 @@
     -fx-text-fill: #b9d9d3;
 }
 
+.task-details {
+    -fx-alignment: center-left;
+}
+
+.schedule-details {
+    -fx-alignment: center-left;
+}
+
+.schedule-badge {
+    -fx-background-color: rgba(91, 111, 170, 0.14);
+    -fx-background-radius: 9px;
+    -fx-border-color: rgba(139, 160, 220, 0.18);
+    -fx-border-radius: 9px;
+    -fx-padding: 3px 7px;
+}
+
+.schedule-label {
+    -fx-text-fill: #8799cd;
+    -fx-font-size: 8px;
+    -fx-font-weight: bold;
+}
+
+.schedule-value {
+    -fx-text-fill: #cfd8f5;
+    -fx-font-size: 10px;
+}
+
+.task-actions {
+    -fx-opacity: 0.72;
+}
+
+.task-card:hover .task-actions {
+    -fx-opacity: 1;
+}
+
+.task-action {
+    -fx-alignment: center;
+    -fx-background-color: rgba(116, 132, 180, 0.11);
+    -fx-background-radius: 10px;
+    -fx-border-color: rgba(139, 160, 220, 0.2);
+    -fx-border-radius: 10px;
+    -fx-cursor: hand;
+    -fx-font-size: 12px;
+    -fx-min-height: 24px;
+    -fx-min-width: 24px;
+    -fx-padding: 2px;
+    -fx-text-fill: #bdc8e9;
+}
+
+.task-action-status:hover,
+.task-action-status:focused {
+    -fx-background-color: rgba(99, 224, 177, 0.16);
+    -fx-border-color: rgba(99, 224, 177, 0.46);
+    -fx-text-fill: #8bedc8;
+}
+
+.task-action-delete:hover,
+.task-action-delete:focused {
+    -fx-background-color: rgba(239, 113, 132, 0.14);
+    -fx-border-color: rgba(239, 113, 132, 0.42);
+    -fx-text-fill: #ff9bab;
+}
+
+.task-action:disabled {
+    -fx-opacity: 0.35;
+}
+
 .composer {
     -fx-background-color: linear-gradient(to bottom, #0c1229, #090e20);
     -fx-border-color: rgba(145, 165, 219, 0.18) transparent transparent transparent;
@@ -278,10 +345,38 @@
 }
 
 .input-hint {
-    -fx-padding: 0 0 0 3px;
+    -fx-padding: 0 3px 0 3px;
     -fx-text-fill: #6f82b5;
     -fx-font-size: 9px;
     -fx-font-weight: bold;
+}
+
+.quick-commands {
+    -fx-min-height: 25px;
+}
+
+.quick-command {
+    -fx-background-color: rgba(101, 117, 178, 0.11);
+    -fx-background-radius: 12px;
+    -fx-border-color: rgba(137, 154, 215, 0.22);
+    -fx-border-radius: 12px;
+    -fx-cursor: hand;
+    -fx-font-size: 9px;
+    -fx-font-weight: bold;
+    -fx-padding: 4px 9px;
+    -fx-text-fill: #9eafe0;
+}
+
+.quick-command:hover,
+.quick-command:focused {
+    -fx-background-color: rgba(127, 142, 232, 0.18);
+    -fx-border-color: rgba(139, 154, 238, 0.5);
+    -fx-text-fill: #d6ddff;
+}
+
+.quick-command:pressed {
+    -fx-background-color: rgba(127, 142, 232, 0.28);
+    -fx-translate-y: 1px;
 }
 
 .command-field {

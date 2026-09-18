@@ -7,6 +7,7 @@ import et.command.ExitCommand;
 import et.command.FindCommand;
 import et.command.ListCommand;
 import et.command.MarkCommand;
+import et.command.SortCommand;
 import et.command.UnmarkCommand;
 import et.exception.ETException;
 import et.storage.Storage;
@@ -54,7 +55,8 @@ class ParserTest {
 
     @Test
     void parseCommand_event_createsEventWithDatesAndTimes() throws ETException {
-        Task task = executeAddCommand("event project meeting /from 2/12/2019 0900 /to 2/12/2019 1000");
+        Task task = executeAddCommand(
+                "event project meeting /from Dec 2, 2019 9:00 am /to 2019-12-2 10:00");
 
         Event event = assertInstanceOf(Event.class, task);
         assertEquals("project meeting", event.getDescription());
@@ -67,6 +69,7 @@ class ParserTest {
     @Test
     void parseCommand_controlCommands_createsMatchingCommandTypes() throws ETException {
         assertInstanceOf(ListCommand.class, parser.parseCommand("list"));
+        assertInstanceOf(SortCommand.class, parser.parseCommand("sort"));
         assertInstanceOf(FindCommand.class, parser.parseCommand("find notes"));
         assertInstanceOf(ExitCommand.class, parser.parseCommand("bye"));
         assertInstanceOf(MarkCommand.class, parser.parseCommand("mark 1"));
@@ -108,6 +111,7 @@ class ParserTest {
         assertThrows(ETException.class,
                 () -> parser.parseCommand("event backwards /from 2/12/2019 1800 /to 2/12/2019 1700"));
         assertThrows(ETException.class, () -> parser.parseCommand("list now"));
+        assertThrows(ETException.class, () -> parser.parseCommand("sort now"));
         assertThrows(ETException.class, () -> parser.parseCommand("bye now"));
         assertThrows(ETException.class, () -> parser.parseCommand("remind me"));
     }

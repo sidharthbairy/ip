@@ -1,6 +1,8 @@
 package et.task;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 
@@ -68,6 +70,48 @@ public class TaskList {
         return tasks.stream()
                 .filter(task -> task.getDescription().toLowerCase(Locale.ROOT).contains(normalizedKeyword))
                 .toList();
+    }
+
+    /**
+     * Returns canonical task numbers in chronological display order without rearranging the task list.
+     *
+     * <p>Incomplete tasks precede completed tasks. Within each status group, deadlines use their due time,
+     * events use their start time, and undated to-dos follow dated tasks. Canonical task number resolves ties.</p>
+     *
+     * @return one-based canonical task numbers in chronological display order
+     */
+    public List<Integer> getChronologicallySortedTaskNumbers() {
+        List<Integer> taskNumbers = new ArrayList<>();
+        for (int taskNumber = 1; taskNumber <= tasks.size(); taskNumber++) {
+            taskNumbers.add(taskNumber);
+        }
+
+        taskNumbers.sort(Comparator
+                .comparing((Integer taskNumber) -> getTask(taskNumber - 1).isDone())
+                .thenComparing(taskNumber -> getTask(taskNumber - 1).getTaskType() == TaskType.TODO)
+                .thenComparing(taskNumber -> getChronologicalDateTime(getTask(taskNumber - 1)))
+                .thenComparingInt(Integer::intValue));
+        return List.copyOf(taskNumbers);
+    }
+
+    /**
+     * Returns the date and time used to position a task chronologically.
+     *
+     * @param task the task whose chronological value is needed
+     * @return the deadline due time, event start time, or the minimum date-time for an undated to-do
+     */
+    private LocalDateTime getChronologicalDateTime(Task task) {
+        return switch (task.getTaskType()) {
+        case TODO -> LocalDateTime.MIN;
+        case DEADLINE -> {
+            assert task instanceof Deadline : "Deadline task type must use the Deadline class";
+            yield ((Deadline) task).getBy();
+        }
+        case EVENT -> {
+            assert task instanceof Event : "Event task type must use the Event class";
+            yield ((Event) task).getFrom();
+        }
+        };
     }
 
     /**

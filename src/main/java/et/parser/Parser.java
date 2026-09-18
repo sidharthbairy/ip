@@ -7,6 +7,7 @@ import et.command.ExitCommand;
 import et.command.FindCommand;
 import et.command.ListCommand;
 import et.command.MarkCommand;
+import et.command.SortCommand;
 import et.command.UnmarkCommand;
 import et.exception.ETException;
 import et.task.Deadline;
@@ -37,6 +38,11 @@ public class Parser {
                 return new ListCommand();
             }
             break;
+        case SORT:
+            if (command.equals(CommandType.SORT.getKeyword())) {
+                return new SortCommand();
+            }
+            break;
         case FIND:
             return new FindCommand(parseKeyword(command, commandType));
         case MARK:
@@ -53,8 +59,8 @@ public class Parser {
         default:
             break;
         }
-        throw new ETException("I don't recognize that command. Try todo, deadline, event, list, find, mark, "
-                + "unmark, delete, or bye.");
+        throw new ETException("I don't recognize that command. Try todo, deadline, event, list, sort, find, "
+                + "mark, unmark, delete, or bye.");
     }
 
     /**

@@ -5,29 +5,60 @@ import et.exception.ETException;
 import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
 import java.time.format.DateTimeParseException;
 import java.time.format.ResolverStyle;
+import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
 
 /**
  * Parses, formats, and serialises the date values accepted by ET commands.
  */
 public final class DateTimeParser {
-    /** The year-first date-only format accepted in commands. */
-    private static final DateTimeFormatter INPUT_YEAR_FIRST_DATE_FORMAT = DateTimeFormatter
-            .ofPattern("uuuu-M-d")
-            .withResolverStyle(ResolverStyle.STRICT);
+    /** The message shown when a command date cannot be parsed. */
+    private static final String INVALID_DATE_MESSAGE = "Please enter a valid date, optionally followed by a time. "
+            + "Examples: 2019-01-05, 5/1/2019, 5 Jan 2019, or Jan 5, 2019 6:30 PM.";
 
-    /** The day-first date-only format accepted in commands. */
-    private static final DateTimeFormatter INPUT_DAY_FIRST_DATE_FORMAT = DateTimeFormatter
-            .ofPattern("d/M/uuuu")
-            .withResolverStyle(ResolverStyle.STRICT);
+    /**
+     * The accepted command date formats.
+     *
+     * <p>Day-first numeric formats precede month-first formats so ambiguous dates retain ET's
+     * existing day-first interpretation.</p>
+     */
+    private static final List<DateTimeFormatter> INPUT_DATE_FORMATS = List.of(
+            createInputFormatter("uuuu-M-d"),
+            createInputFormatter("uuuu/M/d"),
+            createInputFormatter("uuuu.M.d"),
+            createInputFormatter("d/M/uuuu"),
+            createInputFormatter("d-M-uuuu"),
+            createInputFormatter("d.M.uuuu"),
+            createInputFormatter("M/d/uuuu"),
+            createInputFormatter("M-d-uuuu"),
+            createInputFormatter("M.d.uuuu"),
+            createInputFormatter("d MMM uuuu"),
+            createInputFormatter("d MMMM uuuu"),
+            createInputFormatter("MMM d uuuu"),
+            createInputFormatter("MMMM d uuuu"),
+            createInputFormatter("d-MMM-uuuu"),
+            createInputFormatter("d-MMMM-uuuu"),
+            createInputFormatter("MMM-d-uuuu"),
+            createInputFormatter("MMMM-d-uuuu"));
 
-    /** The date-and-time format accepted in commands. */
-    private static final DateTimeFormatter INPUT_DATE_TIME_FORMAT = DateTimeFormatter
-            .ofPattern("d/M/uuuu HHmm")
-            .withResolverStyle(ResolverStyle.STRICT);
+    /** The accepted command time formats, which always follow a date. */
+    private static final List<DateTimeFormatter> INPUT_TIME_FORMATS = List.of(
+            createInputFormatter("HHmm"),
+            createInputFormatter("Hmm"),
+            createInputFormatter("H:mm"),
+            createInputFormatter("H.mm"),
+            createInputFormatter("h:mm a"),
+            createInputFormatter("h:mma"),
+            createInputFormatter("h.mm a"),
+            createInputFormatter("h.mma"),
+            createInputFormatter("h a"),
+            createInputFormatter("ha"));
 
     /** The format used when showing a date without a time. */
     private static final DateTimeFormatter OUTPUT_DATE_FORMAT = DateTimeFormatter
@@ -42,6 +73,20 @@ public final class DateTimeParser {
     }
 
     /**
+     * Creates a strict, case-insensitive formatter for a supported input pattern.
+     *
+     * @param pattern the date or time pattern to accept
+     * @return the configured input formatter
+     */
+    private static DateTimeFormatter createInputFormatter(String pattern) {
+        return new DateTimeFormatterBuilder()
+                .parseCaseInsensitive()
+                .appendPattern(pattern)
+                .toFormatter(Locale.ENGLISH)
+                .withResolverStyle(ResolverStyle.STRICT);
+    }
+
+    /**
      * Parses a command date in one of ET's supported formats.
      *
      * @param input the date text provided after a command marker
@@ -49,26 +94,70 @@ public final class DateTimeParser {
      * @throws ETException if the input is not a valid supported date
      */
     public static ParsedDateTime parse(String input) throws ETException {
-        try {
-            LocalDate date = LocalDate.parse(input, INPUT_YEAR_FIRST_DATE_FORMAT);
-            return new ParsedDateTime(date.atStartOfDay(), false);
-        } catch (DateTimeParseException ignored) {
-            // The input may use the day-first date format instead.
+        String normalizedInput = normalizeInput(input);
+        Optional<LocalDate> date = parseDate(normalizedInput);
+        if (date.isPresent()) {
+            return new ParsedDateTime(date.get().atStartOfDay(), false);
         }
 
-        try {
-            LocalDate date = LocalDate.parse(input, INPUT_DAY_FIRST_DATE_FORMAT);
-            return new ParsedDateTime(date.atStartOfDay(), false);
-        } catch (DateTimeParseException ignored) {
-            // The input may be a date and time instead.
+        int splitPosition = normalizedInput.lastIndexOf(' ');
+        while (splitPosition > 0) {
+            String dateInput = normalizedInput.substring(0, splitPosition);
+            String timeInput = normalizedInput.substring(splitPosition + 1);
+            date = parseDate(dateInput);
+            Optional<LocalTime> time = parseTime(timeInput);
+            if (date.isPresent() && time.isPresent()) {
+                return new ParsedDateTime(LocalDateTime.of(date.get(), time.get()), true);
+            }
+            splitPosition = normalizedInput.lastIndexOf(' ', splitPosition - 1);
         }
 
-        try {
-            return new ParsedDateTime(LocalDateTime.parse(input, INPUT_DATE_TIME_FORMAT), true);
-        } catch (DateTimeParseException e) {
-            throw new ETException("Please use yyyy-M-d or d/M/yyyy, optionally followed by HHmm, "
-                    + "for example 2019-1-5, 2/1/2019, or 2/12/2019 1800.");
+        throw new ETException(INVALID_DATE_MESSAGE);
+    }
+
+    /**
+     * Normalizes harmless punctuation and spacing differences in command dates.
+     *
+     * @param input the raw date and optional time input
+     * @return the normalized input used by the supported formatters
+     */
+    private static String normalizeInput(String input) {
+        assert input != null : "Date input must be provided";
+        return input.strip().replace(",", "").replaceAll("\\s+", " ");
+    }
+
+    /**
+     * Parses a date using each supported input format.
+     *
+     * @param input the normalized date text
+     * @return the parsed date, or an empty value when no format matches
+     */
+    private static Optional<LocalDate> parseDate(String input) {
+        for (DateTimeFormatter dateFormatter : INPUT_DATE_FORMATS) {
+            try {
+                return Optional.of(LocalDate.parse(input, dateFormatter));
+            } catch (DateTimeParseException ignored) {
+                // Continue to the next supported date format.
+            }
         }
+        return Optional.empty();
+    }
+
+    /**
+     * Parses a time using each supported input format.
+     *
+     * @param input the normalized time text
+     * @return the parsed time, or an empty value when no format matches
+     */
+    private static Optional<LocalTime> parseTime(String input) {
+        for (DateTimeFormatter timeFormatter : INPUT_TIME_FORMATS) {
+            try {
+                return Optional.of(LocalTime.parse(input, timeFormatter));
+            } catch (DateTimeParseException ignored) {
+                // Continue to the next supported time format.
+            }
+        }
+        return Optional.empty();
     }
 
     /**
