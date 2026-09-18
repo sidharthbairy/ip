@@ -29,33 +29,33 @@ ____________________________________________________________
 |  _|   | |
 | |___  | |
 |_____| |_|
-Hello, friend! I'm ET, a gentle visitor from far away.
-I may be a little lost, but I would be happy to help with your tasks.
-What can I do for you?
+Oh! Hello, Earth friend. I'm ET, your slightly homesick task helper.
+I collect tasks, deadlines, and curious little plans while I wait for my ride home.
+What shall we remember together?
 ____________________________________________________________
 ____________________________________________________________
-     Got it. I've added this task:
+     Ooh, a new Earth task! I've tucked it safely into the list:
        [D][ ] submit assignment (by: Jan 05 2019)
-     Now you have 1 tasks in the list.
+     My list now holds 1 task.
 ____________________________________________________________
 ____________________________________________________________
-     Got it. I've added this task:
+     Ooh, a new Earth task! I've tucked it safely into the list:
        [E][ ] project meeting (from: Jan 02 2019 to: Jan 03 2019)
-     Now you have 2 tasks in the list.
+     My list now holds 2 tasks.
 ____________________________________________________________
 ____________________________________________________________
-     Got it. I've added this task:
+     Ooh, a new Earth task! I've tucked it safely into the list:
        [D][ ] return book (by: Dec 02 2019 6:00 PM)
-     Now you have 3 tasks in the list.
+     My list now holds 3 tasks.
 ____________________________________________________________
 ____________________________________________________________
-     Here are the tasks in your list:
+     I found these in our little Earth mission:
      1.[D][ ] submit assignment (by: Jan 05 2019)
      2.[E][ ] project meeting (from: Jan 02 2019 to: Jan 03 2019)
      3.[D][ ] return book (by: Dec 02 2019 6:00 PM)
 ____________________________________________________________
 ____________________________________________________________
-     Bye. Hope to see you again soon!
+     Bye for now, Earth friend. Keep looking up!
 ____________________________________________________________
 ```
 
@@ -80,33 +80,33 @@ ____________________________________________________________
 |  _|   | |
 | |___  | |
 |_____| |_|
-Hello, friend! I'm ET, a gentle visitor from far away.
-I may be a little lost, but I would be happy to help with your tasks.
-What can I do for you?
+Oh! Hello, Earth friend. I'm ET, your slightly homesick task helper.
+I collect tasks, deadlines, and curious little plans while I wait for my ride home.
+What shall we remember together?
 ____________________________________________________________
 ____________________________________________________________
-     Got it. I've added this task:
+     Ooh, a new Earth task! I've tucked it safely into the list:
        [D][ ] file taxes (by: Apr 15 2019 6:30 PM)
-     Now you have 1 tasks in the list.
+     My list now holds 1 task.
 ____________________________________________________________
 ____________________________________________________________
-     Got it. I've added this task:
+     Ooh, a new Earth task! I've tucked it safely into the list:
        [D][ ] attend launch (by: Apr 16 2019 6:45 PM)
-     Now you have 2 tasks in the list.
+     My list now holds 2 tasks.
 ____________________________________________________________
 ____________________________________________________________
-     Got it. I've added this task:
+     Ooh, a new Earth task! I've tucked it safely into the list:
        [E][ ] workshop (from: Apr 17 2019 9:00 AM to: Apr 17 2019 10:30 AM)
-     Now you have 3 tasks in the list.
+     My list now holds 3 tasks.
 ____________________________________________________________
 ____________________________________________________________
-     Here are the tasks in your list:
+     I found these in our little Earth mission:
      1.[D][ ] file taxes (by: Apr 15 2019 6:30 PM)
      2.[D][ ] attend launch (by: Apr 16 2019 6:45 PM)
      3.[E][ ] workshop (from: Apr 17 2019 9:00 AM to: Apr 17 2019 10:30 AM)
 ____________________________________________________________
 ____________________________________________________________
-     Bye. Hope to see you again soon!
+     Bye for now, Earth friend. Keep looking up!
 ____________________________________________________________
 ```
 
@@ -132,33 +132,33 @@ ____________________________________________________________
 |  _|   | |
 | |___  | |
 |_____| |_|
-Hello, friend! I'm ET, a gentle visitor from far away.
-I may be a little lost, but I would be happy to help with your tasks.
-What can I do for you?
+Oh! Hello, Earth friend. I'm ET, your slightly homesick task helper.
+I collect tasks, deadlines, and curious little plans while I wait for my ride home.
+What shall we remember together?
 ____________________________________________________________
 ____________________________________________________________
-     Got it. I've added this task:
+     Ooh, a new Earth task! I've tucked it safely into the list:
        [T][ ] read notes
-     Now you have 1 tasks in the list.
+     My list now holds 1 task.
 ____________________________________________________________
 ____________________________________________________________
      Please enter a valid date, optionally followed by a time. Examples: 2019-01-05, 5/1/2019, 5 Jan 2019, or Jan 5, 2019 6:30 PM.
 ____________________________________________________________
 ____________________________________________________________
-     The event end date and time cannot be before its start.
+     Oops! An event cannot end before it starts.
 ____________________________________________________________
 ____________________________________________________________
-     Got it. I've added this task:
+     Ooh, a new Earth task! I've tucked it safely into the list:
        [E][ ] planning (from: Dec 02 2019 9:00 AM to: Dec 02 2019 10:00 AM)
-     Now you have 2 tasks in the list.
+     My list now holds 2 tasks.
 ____________________________________________________________
 ____________________________________________________________
-     Here are the tasks in your list:
+     I found these in our little Earth mission:
      1.[T][ ] read notes
      2.[E][ ] planning (from: Dec 02 2019 9:00 AM to: Dec 02 2019 10:00 AM)
 ____________________________________________________________
 ____________________________________________________________
-     Bye. Hope to see you again soon!
+     Bye for now, Earth friend. Keep looking up!
 ____________________________________________________________
 ```
 
@@ -183,29 +183,29 @@ ____________________________________________________________
 |  _|   | |
 | |___  | |
 |_____| |_|
-Hello, friend! I'm ET, a gentle visitor from far away.
-I may be a little lost, but I would be happy to help with your tasks.
-What can I do for you?
+Oh! Hello, Earth friend. I'm ET, your slightly homesick task helper.
+I collect tasks, deadlines, and curious little plans while I wait for my ride home.
+What shall we remember together?
 ____________________________________________________________
 ____________________________________________________________
-     Got it. I've added this task:
+     Ooh, a new Earth task! I've tucked it safely into the list:
        [T][ ] read notes
-     Now you have 1 tasks in the list.
+     My list now holds 1 task.
 ____________________________________________________________
 ____________________________________________________________
-     Nice! I've marked this task as done:
+     Beep! This task is complete:
        [T][✓] read notes
 ____________________________________________________________
 ____________________________________________________________
-     OK, I've marked this task as not done yet:
+     Oh! This task needs another turn:
        [T][ ] read notes
 ____________________________________________________________
 ____________________________________________________________
-     Here are the tasks in your list:
+     I found these in our little Earth mission:
      1.[T][ ] read notes
 ____________________________________________________________
 ____________________________________________________________
-     Bye. Hope to see you again soon!
+     Bye for now, Earth friend. Keep looking up!
 ____________________________________________________________
 ```
 
@@ -232,40 +232,40 @@ ____________________________________________________________
 |  _|   | |
 | |___  | |
 |_____| |_|
-Hello, friend! I'm ET, a gentle visitor from far away.
-I may be a little lost, but I would be happy to help with your tasks.
-What can I do for you?
+Oh! Hello, Earth friend. I'm ET, your slightly homesick task helper.
+I collect tasks, deadlines, and curious little plans while I wait for my ride home.
+What shall we remember together?
 ____________________________________________________________
 ____________________________________________________________
-     Got it. I've added this task:
+     Ooh, a new Earth task! I've tucked it safely into the list:
        [T][ ] read book
-     Now you have 1 tasks in the list.
+     My list now holds 1 task.
 ____________________________________________________________
 ____________________________________________________________
-     Got it. I've added this task:
+     Ooh, a new Earth task! I've tucked it safely into the list:
        [D][ ] return Book (by: Jun 06 2019)
-     Now you have 2 tasks in the list.
+     My list now holds 2 tasks.
 ____________________________________________________________
 ____________________________________________________________
-     Got it. I've added this task:
+     Ooh, a new Earth task! I've tucked it safely into the list:
        [T][ ] buy groceries
-     Now you have 3 tasks in the list.
+     My list now holds 3 tasks.
 ____________________________________________________________
 ____________________________________________________________
-     Nice! I've marked this task as done:
+     Beep! This task is complete:
        [T][✓] read book
 ____________________________________________________________
 ____________________________________________________________
-     Nice! I've marked this task as done:
+     Beep! This task is complete:
        [D][✓] return Book (by: Jun 06 2019)
 ____________________________________________________________
 ____________________________________________________________
-     Here are the matching tasks in your list:
+     My scanner found these matching tasks:
      1.[T][✓] read book
      2.[D][✓] return Book (by: Jun 06 2019)
 ____________________________________________________________
 ____________________________________________________________
-     Bye. Hope to see you again soon!
+     Bye for now, Earth friend. Keep looking up!
 ____________________________________________________________
 ```
 
@@ -289,31 +289,31 @@ ____________________________________________________________
 |  _|   | |
 | |___  | |
 |_____| |_|
-Hello, friend! I'm ET, a gentle visitor from far away.
-I may be a little lost, but I would be happy to help with your tasks.
-What can I do for you?
+Oh! Hello, Earth friend. I'm ET, your slightly homesick task helper.
+I collect tasks, deadlines, and curious little plans while I wait for my ride home.
+What shall we remember together?
 ____________________________________________________________
 ____________________________________________________________
-     Got it. I've added this task:
+     Ooh, a new Earth task! I've tucked it safely into the list:
        [T][ ] feed cat
-     Now you have 1 tasks in the list.
+     My list now holds 1 task.
 ____________________________________________________________
 ____________________________________________________________
-     Noted. I've removed this task:
+     Poof! I let this task drift away:
        [T][ ] feed cat
-     Now you have 0 tasks in the list.
+     My list now holds 0 tasks.
 ____________________________________________________________
 ____________________________________________________________
-     Here are the tasks in your list:
+     I found these in our little Earth mission:
 ____________________________________________________________
 ____________________________________________________________
-     Bye. Hope to see you again soon!
+     Bye for now, Earth friend. Keep looking up!
 ____________________________________________________________
 ```
 
 ### Reject invalid task numbers
 
-Aim: Verify that malformed and unavailable task numbers show the existing helpful errors.
+Aim: Verify that malformed and unavailable task numbers show ET's scanner-themed helpful errors.
 
 Inputs:
 ```text
@@ -331,23 +331,23 @@ ____________________________________________________________
 |  _|   | |
 | |___  | |
 |_____| |_|
-Hello, friend! I'm ET, a gentle visitor from far away.
-I may be a little lost, but I would be happy to help with your tasks.
-What can I do for you?
+Oh! Hello, Earth friend. I'm ET, your slightly homesick task helper.
+I collect tasks, deadlines, and curious little plans while I wait for my ride home.
+What shall we remember together?
 ____________________________________________________________
 ____________________________________________________________
-     Got it. I've added this task:
+     Ooh, a new Earth task! I've tucked it safely into the list:
        [T][ ] read notes
-     Now you have 1 tasks in the list.
+     My list now holds 1 task.
 ____________________________________________________________
 ____________________________________________________________
-     Please give a valid task number after mark.
+     My scanner needs a valid task number after mark.
 ____________________________________________________________
 ____________________________________________________________
-     That task number is not in the current list.
+     My scanner cannot find that task number in the current list.
 ____________________________________________________________
 ____________________________________________________________
-     Bye. Hope to see you again soon!
+     Bye for now, Earth friend. Keep looking up!
 ____________________________________________________________
 ```
 
@@ -375,46 +375,46 @@ ____________________________________________________________
 |  _|   | |
 | |___  | |
 |_____| |_|
-Hello, friend! I'm ET, a gentle visitor from far away.
-I may be a little lost, but I would be happy to help with your tasks.
-What can I do for you?
+Oh! Hello, Earth friend. I'm ET, your slightly homesick task helper.
+I collect tasks, deadlines, and curious little plans while I wait for my ride home.
+What shall we remember together?
 ____________________________________________________________
 ____________________________________________________________
-     Got it. I've added this task:
+     Ooh, a new Earth task! I've tucked it safely into the list:
        [D][ ] later (by: Jan 10 2027)
-     Now you have 1 tasks in the list.
+     My list now holds 1 task.
 ____________________________________________________________
 ____________________________________________________________
-     Got it. I've added this task:
+     Ooh, a new Earth task! I've tucked it safely into the list:
        [D][ ] earlier (by: Jan 03 2027)
-     Now you have 2 tasks in the list.
+     My list now holds 2 tasks.
 ____________________________________________________________
 ____________________________________________________________
-     Got it. I've added this task:
+     Ooh, a new Earth task! I've tucked it safely into the list:
        [T][ ] undated
-     Now you have 3 tasks in the list.
+     My list now holds 3 tasks.
 ____________________________________________________________
 ____________________________________________________________
-     Nice! I've marked this task as done:
+     Beep! This task is complete:
        [D][✓] later (by: Jan 10 2027)
 ____________________________________________________________
 ____________________________________________________________
-     Here are your tasks sorted chronologically:
+     I lined up your tasks by Earth time:
      2.[D][ ] earlier (by: Jan 03 2027)
      3.[T][ ] undated
      1.[D][✓] later (by: Jan 10 2027)
 ____________________________________________________________
 ____________________________________________________________
-     Nice! I've marked this task as done:
+     Beep! This task is complete:
        [D][✓] earlier (by: Jan 03 2027)
 ____________________________________________________________
 ____________________________________________________________
-     Here are the tasks in your list:
+     I found these in our little Earth mission:
      1.[D][✓] later (by: Jan 10 2027)
      2.[D][✓] earlier (by: Jan 03 2027)
      3.[T][ ] undated
 ____________________________________________________________
 ____________________________________________________________
-     Bye. Hope to see you again soon!
+     Bye for now, Earth friend. Keep looking up!
 ____________________________________________________________
 ```

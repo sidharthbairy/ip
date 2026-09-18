@@ -29,7 +29,7 @@ public abstract class TaskIndexCommand extends Command {
      */
     protected Task getTask(TaskList tasks) throws ETException {
         if (taskIndex < 0 || taskIndex >= tasks.size()) {
-            throw new ETException("That task number is not in the current list.");
+            throw new ETException("My scanner cannot find that task number in the current list.");
         }
         return tasks.getTask(taskIndex);
     }
