@@ -2,9 +2,17 @@
 
 ET saves tasks automatically in `data/tasks.txt`, relative to the project
 root, whenever you add, mark, unmark, or delete one. On startup, ET
-loads the saved tasks again. Dates and times are stored as the strings that you
-enter, so you can use formats such as `Sunday`,
-`11/10/2019 5pm`, or `Mon 2pm`.
+loads the saved tasks again.
+
+## Date and time formats
+
+ET accepts dates with `-`, `/`, or `.` separators, such as `2019-01-05`,
+`2019/1/5`, and `5/1/2019`. You can also use month names, such as
+`5 Jan 2019`, `January 5, 2019`, or `5-Jan-2019`. Ambiguous numeric dates are
+interpreted as day-first.
+
+An optional time must follow the date. Both 24-hour and 12-hour forms are
+accepted, including `1800`, `18:00`, `6pm`, and `6:30 PM`.
 
 ## Adding tasks
 

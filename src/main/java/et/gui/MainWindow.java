@@ -3,6 +3,8 @@ package et.gui;
 import et.ET;
 import et.task.TaskType;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import javafx.animation.PauseTransition;
@@ -15,7 +17,9 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
@@ -85,6 +89,9 @@ public class MainWindow extends Application {
     /** Accepts the next command from the user. */
     private final TextField userInput = new TextField();
 
+    /** Contains task controls that still refer to the latest displayed task numbers. */
+    private final List<Button> activeTaskActionButtons = new ArrayList<>();
+
     /** Keeps the latest conversation messages visible. */
     private ScrollPane scrollPane;
 
@@ -142,7 +149,7 @@ public class MainWindow extends Application {
     }
 
     /**
-     * Creates the command field, send button, and input hint.
+     * Creates the quick commands, command field, and send button.
      *
      * @return the complete command composer
      */
@@ -160,13 +167,75 @@ public class MainWindow extends Application {
         HBox inputBar = new HBox(10, userInput, sendButton);
         inputBar.setAlignment(Pos.CENTER);
 
-        Label inputHint = new Label("QUICK SIGNALS   LIST  ·  TODO  ·  DEADLINE  ·  FIND");
-        inputHint.getStyleClass().add("input-hint");
-
-        VBox composer = new VBox(8, inputHint, inputBar);
+        VBox composer = new VBox(9, createQuickCommands(), inputBar);
         composer.setPadding(new Insets(14, 20, 18, 20));
         composer.getStyleClass().add("composer");
         return composer;
+    }
+
+    /**
+     * Creates shortcuts for common commands and command templates.
+     *
+     * @return the row of quick-command controls
+     */
+    private HBox createQuickCommands() {
+        Label inputHint = new Label("QUICK SIGNALS");
+        inputHint.getStyleClass().add("input-hint");
+
+        Button listButton = createQuickCommandButton("LIST", "Show all tasks");
+        listButton.setOnAction(event -> submitCommand("list"));
+
+        Button sortButton = createQuickCommandButton("SORT", "Show tasks in chronological order");
+        sortButton.setOnAction(event -> submitCommand("sort"));
+
+        Button todoButton = createQuickCommandButton("+ TODO", "Prepare a to-do command");
+        todoButton.setOnAction(event -> prepareTaskCommand("todo <task name>"));
+
+        Button deadlineButton = createQuickCommandButton("+ DEADLINE", "Prepare a deadline command");
+        deadlineButton.setOnAction(event -> prepareTaskCommand(
+                "deadline <task name> /by <date/time>"));
+
+        Button eventButton = createQuickCommandButton("+ EVENT", "Prepare an event command");
+        eventButton.setOnAction(event -> prepareTaskCommand(
+                "event <task name> /from <start date/time> /to <end date/time>"));
+
+        Button findButton = createQuickCommandButton("FIND", "Search tasks by name");
+        findButton.setOnAction(event -> prepareTaskCommand("find <task name>"));
+
+        HBox quickCommands = new HBox(7, inputHint, listButton, sortButton, todoButton,
+                deadlineButton, eventButton, findButton);
+        quickCommands.setAlignment(Pos.CENTER_LEFT);
+        quickCommands.getStyleClass().add("quick-commands");
+        return quickCommands;
+    }
+
+    /**
+     * Creates a consistently styled quick-command button.
+     *
+     * @param text the short command label
+     * @param helpText the explanation shown on hover
+     * @return the configured quick-command button
+     */
+    private Button createQuickCommandButton(String text, String helpText) {
+        Button button = new Button(text);
+        button.setTooltip(new Tooltip(helpText));
+        button.getStyleClass().add("quick-command");
+        return button;
+    }
+
+    /**
+     * Places a structured task command in the input field and selects its task-name placeholder.
+     *
+     * @param commandTemplate the task command containing a task-name placeholder
+     */
+    private void prepareTaskCommand(String commandTemplate) {
+        String taskNamePlaceholder = "<task name>";
+        int taskNameStart = commandTemplate.indexOf(taskNamePlaceholder);
+        assert taskNameStart >= 0 : "Task command template must contain a task-name placeholder";
+
+        userInput.setText(commandTemplate);
+        userInput.selectRange(taskNameStart, taskNameStart + taskNamePlaceholder.length());
+        userInput.requestFocus();
     }
 
     /**
@@ -254,15 +323,30 @@ public class MainWindow extends Application {
 
     /** Sends a non-blank user command to ET and displays both sides of the exchange. */
     private void handleUserInput() {
-        String input = userInput.getText().trim();
+        String input = userInput.getText();
+        if (input.isBlank()) {
+            return;
+        }
+
+        userInput.clear();
+        submitCommand(input);
+    }
+
+    /**
+     * Sends a command from the composer or an on-screen shortcut to ET.
+     *
+     * @param command the complete command to execute
+     */
+    private void submitCommand(String command) {
+        String input = command.trim();
         if (input.isEmpty()) {
             return;
         }
 
+        disableTaskActions();
         addDialog(input, true);
         ET.CommandResult result = et.getCommandResult(input);
         addDialog(result.response(), false);
-        userInput.clear();
         if (result.shouldExit()) {
             closeAfterFarewell();
         }
@@ -388,14 +472,111 @@ public class MainWindow extends Application {
         taskCard.getChildren().addAll(createTaskTypeIcon(taskDisplay.taskType()),
                 createStatusIndicator(taskDisplay.isDone()));
 
+        VBox taskDetails = createTaskDetails(taskDisplay);
+        HBox.setHgrow(taskDetails, Priority.ALWAYS);
+        taskCard.getChildren().add(taskDetails);
+
+        if (!taskDisplay.taskNumber().isEmpty()) {
+            taskCard.getChildren().add(createTaskActions(taskDisplay));
+        }
+        return taskCard;
+    }
+
+    /**
+     * Creates the description and any schedule badges for a task card.
+     *
+     * @param taskDisplay the parsed task details
+     * @return the vertically arranged task information
+     */
+    private VBox createTaskDetails(TaskDisplayParser.TaskDisplay taskDisplay) {
         Label description = new Label(taskDisplay.description());
         description.setWrapText(true);
         description.setMinHeight(Region.USE_PREF_SIZE);
-        description.setMaxWidth(MESSAGE_WIDTH - 120);
+        description.setMaxWidth(MESSAGE_WIDTH - 220);
         description.getStyleClass().add("task-description");
-        HBox.setHgrow(description, Priority.ALWAYS);
-        taskCard.getChildren().add(description);
-        return taskCard;
+
+        VBox taskDetails = new VBox(6, description);
+        taskDetails.getStyleClass().add("task-details");
+        if (!taskDisplay.scheduleDetails().isEmpty()) {
+            FlowPane scheduleDetails = new FlowPane();
+            scheduleDetails.setHgap(6);
+            scheduleDetails.setVgap(5);
+            scheduleDetails.getStyleClass().add("schedule-details");
+            for (TaskDisplayParser.ScheduleDetail scheduleDetail : taskDisplay.scheduleDetails()) {
+                scheduleDetails.getChildren().add(createScheduleBadge(scheduleDetail));
+            }
+            taskDetails.getChildren().add(scheduleDetails);
+        }
+        return taskDetails;
+    }
+
+    /**
+     * Creates one labelled schedule badge for a deadline or event.
+     *
+     * @param scheduleDetail the label and formatted date or time
+     * @return the styled schedule badge
+     */
+    private HBox createScheduleBadge(TaskDisplayParser.ScheduleDetail scheduleDetail) {
+        Label label = new Label(scheduleDetail.label());
+        label.getStyleClass().add("schedule-label");
+
+        Label value = new Label(scheduleDetail.value());
+        value.getStyleClass().add("schedule-value");
+
+        HBox badge = new HBox(5, label, value);
+        badge.setAlignment(Pos.CENTER_LEFT);
+        badge.getStyleClass().add("schedule-badge");
+        return badge;
+    }
+
+    /**
+     * Creates completion and deletion controls for a numbered task card.
+     *
+     * @param taskDisplay the task targeted by the controls
+     * @return the row of task action buttons
+     */
+    private HBox createTaskActions(TaskDisplayParser.TaskDisplay taskDisplay) {
+        String statusCommand = taskDisplay.isDone() ? "unmark " : "mark ";
+        String statusLabel = taskDisplay.isDone() ? "Mark as not done" : "Mark as done";
+        String statusGlyph = taskDisplay.isDone() ? "↶" : "✓";
+
+        Button statusButton = createTaskActionButton(statusGlyph, statusLabel, "task-action-status");
+        statusButton.setOnAction(event -> submitCommand(statusCommand + taskDisplay.taskNumber()));
+
+        Button deleteButton = createTaskActionButton("×", "Delete task", "task-action-delete");
+        deleteButton.setOnAction(event -> submitCommand("delete " + taskDisplay.taskNumber()));
+
+        activeTaskActionButtons.add(statusButton);
+        activeTaskActionButtons.add(deleteButton);
+
+        HBox taskActions = new HBox(5, statusButton, deleteButton);
+        taskActions.setAlignment(Pos.CENTER_RIGHT);
+        taskActions.getStyleClass().add("task-actions");
+        return taskActions;
+    }
+
+    /**
+     * Creates an accessible icon button for a task action.
+     *
+     * @param glyph the symbol displayed by the button
+     * @param accessibleText the action description used by assistive tools and the tooltip
+     * @param styleClass the action-specific style class
+     * @return the configured task action button
+     */
+    private Button createTaskActionButton(String glyph, String accessibleText, String styleClass) {
+        Button button = new Button(glyph);
+        button.setAccessibleText(accessibleText);
+        button.setTooltip(new Tooltip(accessibleText));
+        button.getStyleClass().addAll("task-action", styleClass);
+        return button;
+    }
+
+    /** Disables task controls whose displayed numbers may become stale after another command. */
+    private void disableTaskActions() {
+        for (Button taskActionButton : activeTaskActionButtons) {
+            taskActionButton.setDisable(true);
+        }
+        activeTaskActionButtons.clear();
     }
 
     /**

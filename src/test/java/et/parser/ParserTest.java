@@ -55,7 +55,8 @@ class ParserTest {
 
     @Test
     void parseCommand_event_createsEventWithDatesAndTimes() throws ETException {
-        Task task = executeAddCommand("event project meeting /from 2/12/2019 0900 /to 2/12/2019 1000");
+        Task task = executeAddCommand(
+                "event project meeting /from Dec 2, 2019 9:00 am /to 2019-12-2 10:00");
 
         Event event = assertInstanceOf(Event.class, task);
         assertEquals("project meeting", event.getDescription());

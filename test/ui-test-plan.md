@@ -59,6 +59,57 @@ ____________________________________________________________
 ____________________________________________________________
 ```
 
+### Accept common date and time formats
+
+Aim: Verify that year-first, month-name, 12-hour, and 24-hour inputs are accepted when the time follows the date.
+
+Inputs:
+```text
+deadline file taxes /by 2019/4/15 18:30
+deadline attend launch /by April 16, 2019 6:45 pm
+event workshop /from 17-Apr-2019 9am /to Apr 17 2019 10:30 AM
+list
+bye
+```
+
+Expected output:
+```text
+____________________________________________________________
+ _____ _____
+| ____|_   _|
+|  _|   | |
+| |___  | |
+|_____| |_|
+Hello, friend! I'm ET, a gentle visitor from far away.
+I may be a little lost, but I would be happy to help with your tasks.
+What can I do for you?
+____________________________________________________________
+____________________________________________________________
+     Got it. I've added this task:
+       [D][ ] file taxes (by: Apr 15 2019 6:30 PM)
+     Now you have 1 tasks in the list.
+____________________________________________________________
+____________________________________________________________
+     Got it. I've added this task:
+       [D][ ] attend launch (by: Apr 16 2019 6:45 PM)
+     Now you have 2 tasks in the list.
+____________________________________________________________
+____________________________________________________________
+     Got it. I've added this task:
+       [E][ ] workshop (from: Apr 17 2019 9:00 AM to: Apr 17 2019 10:30 AM)
+     Now you have 3 tasks in the list.
+____________________________________________________________
+____________________________________________________________
+     Here are the tasks in your list:
+     1.[D][ ] file taxes (by: Apr 15 2019 6:30 PM)
+     2.[D][ ] attend launch (by: Apr 16 2019 6:45 PM)
+     3.[E][ ] workshop (from: Apr 17 2019 9:00 AM to: Apr 17 2019 10:30 AM)
+____________________________________________________________
+____________________________________________________________
+     Bye. Hope to see you again soon!
+____________________________________________________________
+```
+
 ### Reject invalid or reversed event dates
 
 Aim: Verify that invalid date text and an event ending before it starts do not add tasks, while a valid event still uses formatted times.
@@ -91,7 +142,7 @@ ____________________________________________________________
      Now you have 1 tasks in the list.
 ____________________________________________________________
 ____________________________________________________________
-     Please use yyyy-M-d or d/M/yyyy, optionally followed by HHmm, for example 2019-1-5, 2/1/2019, or 2/12/2019 1800.
+     Please enter a valid date, optionally followed by a time. Examples: 2019-01-05, 5/1/2019, 5 Jan 2019, or Jan 5, 2019 6:30 PM.
 ____________________________________________________________
 ____________________________________________________________
      The event end date and time cannot be before its start.

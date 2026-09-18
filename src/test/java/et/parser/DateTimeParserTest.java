@@ -40,6 +40,31 @@ class DateTimeParserTest {
     }
 
     @Test
+    void parse_commonNumericDateFormats_correctDates() throws ETException {
+        assertParsesAs("2019/1/5", LocalDateTime.of(2019, 1, 5, 0, 0), false);
+        assertParsesAs("5-1-2019", LocalDateTime.of(2019, 1, 5, 0, 0), false);
+        assertParsesAs("5.1.2019", LocalDateTime.of(2019, 1, 5, 0, 0), false);
+        assertParsesAs("12/31/2019", LocalDateTime.of(2019, 12, 31, 0, 0), false);
+    }
+
+    @Test
+    void parse_commonMonthNameFormats_correctDates() throws ETException {
+        assertParsesAs("5 Jan 2019", LocalDateTime.of(2019, 1, 5, 0, 0), false);
+        assertParsesAs("January 5, 2019", LocalDateTime.of(2019, 1, 5, 0, 0), false);
+        assertParsesAs("5-Jan-2019", LocalDateTime.of(2019, 1, 5, 0, 0), false);
+        assertParsesAs("JAN-5-2019", LocalDateTime.of(2019, 1, 5, 0, 0), false);
+    }
+
+    @Test
+    void parse_commonTimeFormats_correctTimes() throws ETException {
+        assertParsesAs("5/1/2019 8:30", LocalDateTime.of(2019, 1, 5, 8, 30), true);
+        assertParsesAs("5 Jan 2019 8:30 pm", LocalDateTime.of(2019, 1, 5, 20, 30), true);
+        assertParsesAs("Jan 5, 2019 8pm", LocalDateTime.of(2019, 1, 5, 20, 0), true);
+        assertParsesAs("2019.1.5 8.30 AM", LocalDateTime.of(2019, 1, 5, 8, 30), true);
+        assertParsesAs("5/1/2019 830", LocalDateTime.of(2019, 1, 5, 8, 30), true);
+    }
+
+    @Test
     void parse_malformedOrImpossibleDate_etExceptionThrown() {
         assertThrows(ETException.class, () -> DateTimeParser.parse("not a date"));
         assertThrows(ETException.class, () -> DateTimeParser.parse("2019-2-29"));
@@ -95,5 +120,21 @@ class DateTimeParserTest {
         String storedDate = DateTimeParser.formatForStorage(LocalDateTime.of(2019, 1, 5, 8, 30), true);
 
         assertEquals("2019-01-05T08:30", storedDate);
+    }
+
+    /**
+     * Verifies one accepted input against its expected date, time, and time-presence flag.
+     *
+     * @param input the date and optional time to parse
+     * @param expectedValue the expected date and time value
+     * @param expectedHasTime whether the input is expected to contain a time
+     * @throws ETException if the input is not accepted
+     */
+    private void assertParsesAs(String input, LocalDateTime expectedValue, boolean expectedHasTime)
+            throws ETException {
+        DateTimeParser.ParsedDateTime parsedDateTime = DateTimeParser.parse(input);
+
+        assertEquals(expectedValue, parsedDateTime.value());
+        assertEquals(expectedHasTime, parsedDateTime.hasTime());
     }
 }
