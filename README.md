@@ -2,6 +2,19 @@
 
 This is a project template for a greenfield Java project. Its chatbot is named _ET_. Given below are instructions on how to use it.
 
+## Acknowledgement of AI assistance
+
+Sidharth Bairy (GitHub: `sidharthbairy`) used **OpenAI Codex** throughout the development of ET.
+The assistance included generating and editing Java code, suggesting designs and refactorings,
+debugging issues, configuring Gradle and JAR packaging, and developing the JavaFX interface
+and chatbot personality. Codex also helped write and update JUnit tests, console UI test plans,
+and project documentation, including this acknowledgement, and run builds and tests.
+
+The extent of use included direct implementation of project features and tests, as well as
+explanations, code review, and assistance with Git workflows. AI-generated and AI-assisted
+work is therefore present across the implementation, tests, and documentation. Sidharth Bairy
+remains responsible for the submitted work and its correctness.
+
 ## Setting up in Intellij
 
 Prerequisites: JDK 25, update Intellij to the most recent version.
